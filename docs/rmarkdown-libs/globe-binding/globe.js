@@ -30,7 +30,11 @@ HTMLWidgets.widget(
     stuff.renderer.setSize( width, height );
     stuff.width = width;
     stuff.height = height;
-    stuff.camera.projectionMatrix = new THREE.Matrix4().makePerspective(stuff.camera.fov,  stuff.renderer.domElement.width/stuff.renderer.domElement.height, stuff.camera.near, stuff.camera.far);
+    var ymax = stuff.camera.near * Math.tan((Math.PI / 180) * stuff.camera.fov * 0.5);
+    var ymin = - ymax;
+    var xmin = ymin * stuff.camera.aspect;
+    var xmax = ymax * stuff.camera.aspect;
+    stuff.camera.projectionMatrix = new THREE.Matrix4().makePerspective(xmin, xmax, ymax, ymin, stuff.camera.near, stuff.camera.far);
     stuff.camera.lookAt(stuff.scene.position);
     stuff.renderer.render( stuff.scene, stuff.camera );
   },
@@ -60,7 +64,8 @@ HTMLWidgets.widget(
     var img, geometry, tex, earth;
     var down = false;
     var sx = 0, sy = 0;
-    tex = THREE.ImageUtils.loadTexture(x.img, {}, function() {render();});
+//    tex = THREE.ImageUtils.loadTexture(x.img, {}, function() {render();});
+    tex = new THREE.TextureLoader().load(x.img, function(texture) {render();});
 
     var vertexShader = [
     'uniform vec3 viewVector;',
@@ -272,7 +277,11 @@ HTMLWidgets.widget(
       if(GL) stuff.camera.fov -= event.wheelDeltaY * 0.02;
       else stuff.camera.fov -= event.wheelDeltaY * 0.0075;
       stuff.camera.fov = Math.max( Math.min( stuff.camera.fov, fovMAX ), fovMIN );
-      stuff.camera.projectionMatrix = new THREE.Matrix4().makePerspective(stuff.camera.fov,  stuff.renderer.domElement.width/stuff.renderer.domElement.height, stuff.camera.near, stuff.camera.far);
+      var ymax = stuff.camera.near * Math.tan((Math.PI / 180) * stuff.camera.fov * 0.5);
+      var ymin = - ymax;
+      var xmin = ymin * stuff.camera.aspect;
+      var xmax = ymax * stuff.camera.aspect;
+      stuff.camera.projectionMatrix = new THREE.Matrix4().makePerspective(xmin, xmax, ymax, ymin, stuff.camera.near, stuff.camera.far);
       render();
     }
     el.onmousewheel = function(ev) {ev.preventDefault();};
@@ -296,18 +305,6 @@ HTMLWidgets.widget(
         render();
       }
     };
-
-//  We disabled the usual Three.js animation technique in favor of simply
-//  rendering after mouse updates. This results in a bit of choppiness for
-//  Canvas renderings, but is compatible with more browsers and with older
-//  versions of RStudio because it doesn't need requestAnimationFrame.
-
-//    animate();
-//    function animate() {
-//      renderer.clear();
-//      requestAnimationFrame( animate );
-//      render();
-//    }
 
     function render() {
       stuff.renderer.clear();
