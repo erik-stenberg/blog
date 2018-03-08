@@ -26,7 +26,7 @@ flights <- flights %>%
 ```
 
 ```{r}
-library(threejs)
+suppressMessages(library(threejs))
 f1 <- flights %>% select(airline, source_air, dest_air)
 a1 <- airports %>% select(IATA_FAA, latitude, longitude )
 

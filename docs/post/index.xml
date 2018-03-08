@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>Flights</title>
+      <link>/post/flights/</link>
+      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/flights/</guid>
+      <description># Display all flights in the world airports &amp;lt;- read.csv(&amp;quot;airports.dat&amp;quot;, header=FALSE, stringsAsFactors=FALSE) colnames(airports) &amp;lt;- c(&amp;quot;airport_id&amp;quot;, &amp;quot;name&amp;quot;, &amp;quot;city&amp;quot;, &amp;quot;country&amp;quot;, &amp;quot;IATA_FAA&amp;quot;, &amp;quot;ICAO&amp;quot;, &amp;quot;latitude&amp;quot;, &amp;quot;longitude&amp;quot;, &amp;quot;altitude&amp;quot;, &amp;quot;timezone&amp;quot;, &amp;quot;DST&amp;quot;) airports &amp;lt;- subset(airports, IATA_FAA != &amp;#39;&amp;#39;) flights &amp;lt;- read.csv(&amp;quot;routes.dat&amp;quot;, header=FALSE, stringsAsFactors=FALSE) colnames(flights) &amp;lt;- c(&amp;quot;airline&amp;quot;, &amp;quot;airline_id&amp;quot;, &amp;quot;source_air&amp;quot;, &amp;quot;source_air_id&amp;quot;, &amp;quot;dest_air&amp;quot;, &amp;quot;dest_air_id&amp;quot;,&amp;quot;code_share&amp;quot;, &amp;quot;stops&amp;quot;, &amp;quot;equipment&amp;quot;) ################### a) suppressMessages(library(dplyr)) flights &amp;lt;- flights %&amp;gt;% filter(airline %in% c(&amp;quot;EK&amp;quot;,&amp;quot;LH&amp;quot;,&amp;quot;DL&amp;quot;)) suppressMessages(library(threejs)) f1 &amp;lt;- flights %&amp;gt;% select(airline, source_air, dest_air) a1 &amp;lt;- airports %&amp;gt;% select(IATA_FAA, latitude, longitude ) m &amp;lt;- merge(x = f1, y=a1, by.</description>
+    </item>
+    
+    <item>
       <title>Shakespeare</title>
       <link>/post/shakespeare/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
