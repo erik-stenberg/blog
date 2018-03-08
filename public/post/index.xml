@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Hugo Tanka Theme</title>
-    <link>/</link>
-    <description>Recent content on Hugo Tanka Theme</description>
+    <title>Posts on Hugo Tanka Theme</title>
+    <link>/post/</link>
+    <description>Recent content in Posts on Hugo Tanka Theme</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 26 Dec 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 08 Mar 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>asdf</title>
+      <link>/post/asdf/</link>
+      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/asdf/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Tanka Theme Demo</title>
