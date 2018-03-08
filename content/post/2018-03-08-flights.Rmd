@@ -1,0 +1,50 @@
+---
+title: Flights
+author: Erik
+date: '2018-03-08'
+slug: flights
+categories: []
+tags: []
+---
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = "/Users/erik/Documents/blog/data")
+```
+
+```{r}
+# Display all flights in the world
+airports <- read.csv("airports.dat", header=FALSE, stringsAsFactors=FALSE)
+colnames(airports) <- c("airport_id", "name", "city", "country", "IATA_FAA", "ICAO", "latitude", "longitude", "altitude", "timezone", "DST")
+airports <- subset(airports, IATA_FAA != '')
+flights <- read.csv("routes.dat", header=FALSE, stringsAsFactors=FALSE)
+colnames(flights) <- c("airline", "airline_id", "source_air", "source_air_id", "dest_air", "dest_air_id","code_share", "stops", "equipment")
+
+
+################### a)
+suppressMessages(library(dplyr))
+flights <- flights %>% 
+  filter(airline %in% c("EK","LH","DL"))
+```
+
+```{r}
+library(threejs)
+f1 <- flights %>% select(airline, source_air, dest_air)
+a1 <- airports %>% select(IATA_FAA, latitude, longitude )
+
+m <- merge(x = f1, y=a1, by.x = "source_air", by.y = "IATA_FAA")
+m <- merge(x = m,  y=a1, by.x = "dest_air", by.y="IATA_FAA")
+
+m <- m %>% select(airline, latitude.x, longitude.x, latitude.y, longitude.y, airline)
+colnames(m) <- c("airline","origin_lat","origin_long","dest_lat","dest_long")
+
+m <- m %>% 
+  arrange(airline) %>% 
+  mutate(color=ifelse(airline=="DL","#02C5FE",
+                      ifelse(airline=="LH","#DE88F78",
+                             ifelse(airline=="EK","#88F8AB",NA))))
+
+
+globejs(arcs=m[,2:5], long=airports[,8],lat=airports[,7],value=0.1,arcsHeight=0.23, arcsLwd=0.01, arcsColor=m$color, color="white",arcsOpacity=.25, emissive="black",
+        atmosphere=TRUE, height=600, width = 600, bodycolor="white")
+
+```
+
