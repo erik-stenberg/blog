@@ -1,10 +1,10 @@
 ---
-title: Flights
-author: Erik
+title: "Flights"
+author: "Erik"
 date: '2018-03-08'
 slug: flights
-categories: []
 tags: []
+categories: []
 ---
 ```{r setup, include=FALSE}
 knitr::opts_knit$set(root.dir = "/Users/erik/Documents/blog/data")
