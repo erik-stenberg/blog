@@ -14,7 +14,6 @@ knitr::opts_knit$set(root.dir = "/Users/erik/Documents/blog/data")
 
 ```{r}
 library(readr)
-getwd()
 suppressMessages(Shakespeare <- read_csv("Shakespeare.csv"))
 
 ```
