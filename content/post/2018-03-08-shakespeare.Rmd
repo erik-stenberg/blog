@@ -1,0 +1,44 @@
+---
+title: "Shakespeare"
+author: "Erik"
+date: '2018-03-08'
+slug: shakespeare
+tags: []
+categories: []
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = "/Users/erik/Documents/blog/data")
+```
+
+
+```{r}
+library(readr)
+getwd()
+suppressMessages(Shakespeare <- read_csv("Shakespeare.csv"))
+
+```
+
+```{r}
+library(treemap)
+treemap(Shakespeare,
+        index=(c("Play_ID")),
+        vSize="nLines")
+```
+
+```{r,message=F}
+library(dplyr)
+Shakespeare %>% 
+  group_by(Play_ID) %>% 
+  summarise(s = sum(nLines)) %>% 
+  arrange(desc(s))
+```
+
+
+```{r}
+library(sunburstR)
+str2 = Shakespeare %>% 
+  mutate(str = paste0("Type:",Type,"-","Play:",Play_ID,"-","Character:",Character_ID)) %>% 
+  select(str, nLines)
+sunburst(str2)
+```

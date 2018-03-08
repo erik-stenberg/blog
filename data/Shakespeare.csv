@@ -1,0 +1,352 @@
+Type,Play_ID,Character_ID,nLines
+ Comedies,As You Like It,Adam,10
+ Comedies,As You Like It,Amiens,10
+ Comedies,As You Like It,Audrey,12
+ Comedies,As You Like It,Celia,108
+ Comedies,As You Like It,Charles,8
+ Comedies,As You Like It,Corin,24
+ Comedies,As You Like It,Dennis,2
+ Comedies,As You Like It,Duke,32
+ Comedies,As You Like It,Frederick,20
+ Comedies,As You Like It,Hymen,1
+ Comedies,As You Like It,Jaques (lord),57
+ Comedies,As You Like It,Jaques (son),2
+ Comedies,As You Like It,Le Beau,14
+ Comedies,As You Like It,Oliver,37
+ Comedies,As You Like It,Orlando,120
+ Comedies,As You Like It,Phebe,23
+ Comedies,As You Like It,Rosalind,201
+ Comedies,As You Like It,Silvius,24
+ Comedies,As You Like It,Sir Oliver Martext,3
+ Comedies,As You Like It,Touchstone,74
+ Comedies,As You Like It,William,11
+ Comedies,Comedy Of Errors,Adriana,79
+ Comedies,Comedy Of Errors,Aegeon,17
+ Comedies,Comedy Of Errors,Aemilia,16
+ Comedies,Comedy Of Errors,Angelo,31
+ Comedies,Comedy Of Errors,Antipholus of Ephesus,76
+ Comedies,Comedy Of Errors,Antipholus of Syracuse,103
+ Comedies,Comedy Of Errors,Balthazar,5
+ Comedies,Comedy Of Errors,Courtezan,11
+ Comedies,Comedy Of Errors,Dromio of Ephesus,63
+ Comedies,Comedy Of Errors,Dromio of Syracuse,99
+ Comedies,Comedy Of Errors,Luce,7
+ Comedies,Comedy Of Errors,Luciana,43
+ Comedies,Comedy Of Errors,Pinch,6
+ Comedies,Comedy Of Errors,Solinus,22
+ Comedies,Merchant Of Venice,Antonio,47
+ Comedies,Merchant Of Venice,Balthasar,1
+ Comedies,Merchant Of Venice,Bassanio,73
+ Comedies,Merchant Of Venice,Duke (of Venice),18
+ Comedies,Merchant Of Venice,Gratiano,48
+ Comedies,Merchant Of Venice,Jessica,26
+ Comedies,Merchant Of Venice,Launcelot Gobbo,44
+ Comedies,Merchant Of Venice,Leonardo,2
+ Comedies,Merchant Of Venice,Lorenzo,47
+ Comedies,Merchant Of Venice,Nerissa,36
+ Comedies,Merchant Of Venice,Old Gobbo,19
+ Comedies,Merchant Of Venice,Portia,117
+ Comedies,Merchant Of Venice,Prince of Arragon,4
+ Comedies,Merchant Of Venice,Prince of Morocco,7
+ Comedies,Merchant Of Venice,Salanio,18
+ Comedies,Merchant Of Venice,Salarino,27
+ Comedies,Merchant Of Venice,Salerio,6
+ Comedies,Merchant Of Venice,Shylock,79
+ Comedies,Merchant Of Venice,Stephano,3
+ Comedies,Merchant Of Venice,Tubal,8
+ Comedies,Midsummer Night's Dream,Bottom,59
+ Comedies,Midsummer Night's Dream,Cobweb,4
+ Comedies,Midsummer Night's Dream,Demetrius,48
+ Comedies,Midsummer Night's Dream,Egeus,7
+ Comedies,Midsummer Night's Dream,Fairy,4
+ Comedies,Midsummer Night's Dream,Flute,18
+ Comedies,Midsummer Night's Dream,Helena,36
+ Comedies,Midsummer Night's Dream,Hermia,48
+ Comedies,Midsummer Night's Dream,Hippolyta,14
+ Comedies,Midsummer Night's Dream,Lysander,50
+ Comedies,Midsummer Night's Dream,Moth,2
+ Comedies,Midsummer Night's Dream,Mustardseed,5
+ Comedies,Midsummer Night's Dream,Oberon,29
+ Comedies,Midsummer Night's Dream,Peaseblossom,4
+ Comedies,Midsummer Night's Dream,Philostrate,6
+ Comedies,Midsummer Night's Dream,Puck,33
+ Comedies,Midsummer Night's Dream,Quince,40
+ Comedies,Midsummer Night's Dream,Snout,9
+ Comedies,Midsummer Night's Dream,Snug,4
+ Comedies,Midsummer Night's Dream,Starveling,7
+ Comedies,Midsummer Night's Dream,Theseus,48
+ Comedies,Midsummer Night's Dream,Titania,23
+ Comedies,Taming Of The Shrew,Baptista Minola,68
+ Comedies,Taming Of The Shrew,Bianca,29
+ Comedies,Taming Of The Shrew,Biondello,39
+ Comedies,Taming Of The Shrew,Christopher Sly,24
+ Comedies,Taming Of The Shrew,Curtis,20
+ Comedies,Taming Of The Shrew,Gremio,58
+ Comedies,Taming Of The Shrew,Grumio,63
+ Comedies,Taming Of The Shrew,Haberdasher,1
+ Comedies,Taming Of The Shrew,Hortensio,70
+ Comedies,Taming Of The Shrew,Joseph,1
+ Comedies,Taming Of The Shrew,Katherina,82
+ Comedies,Taming Of The Shrew,Lucentio,61
+ Comedies,Taming Of The Shrew,Nathaniel,4
+ Comedies,Taming Of The Shrew,Nicholas,1
+ Comedies,Taming Of The Shrew,Peter,2
+ Comedies,Taming Of The Shrew,Petruchio,158
+ Comedies,Taming Of The Shrew,Philip,1
+ Comedies,Taming Of The Shrew,Tranio,90
+ Comedies,Taming Of The Shrew,Vincentio,23
+ Comedies,The Tempest,Adrian,9
+ Comedies,The Tempest,Alonso,40
+ Comedies,The Tempest,"Antonio,  duke of Milan",57
+ Comedies,The Tempest,Ariel,45
+ Comedies,The Tempest,Caliban,50
+ Comedies,The Tempest,Ceres,4
+ Comedies,The Tempest,Ferdinand,31
+ Comedies,The Tempest,Francisco,2
+ Comedies,The Tempest,Gonzalo,52
+ Comedies,The Tempest,Iris,4
+ Comedies,The Tempest,Juno,2
+ Comedies,The Tempest,Master,2
+ Comedies,The Tempest,Miranda,50
+ Comedies,The Tempest,Nymphs,0
+ Comedies,The Tempest,Prospero,114
+ Comedies,The Tempest,Reapers,0
+ Comedies,The Tempest,Sebastian,67
+ Comedies,The Tempest,Stephano (Servant to Portia),60
+ Comedies,The Tempest,Trinculo,39
+ Histories,Henry VIII,Anne Bullen,18
+ Histories,Henry VIII,Archbishop Cranmer,21
+ Histories,Henry VIII,Bishop Lincoln,2
+ Histories,Henry VIII,Brandon,6
+ Histories,Henry VIII,Capucius,5
+ Histories,Henry VIII,Cardinal Campeius,14
+ Histories,Henry VIII,Cardinal Wolsey,79
+ Histories,Henry VIII,Cromwell,21
+ Histories,Henry VIII,Doctor Butts,4
+ Histories,Henry VIII,Duke of Buckingham,26
+ Histories,Henry VIII,Duke of Norfolk,48
+ Histories,Henry VIII,Duke of Suffolk,30
+ Histories,Henry VIII,Earl of Surrey,24
+ Histories,Henry VIII,First Secretary to Wolsey,2
+ Histories,Henry VIII,Gardiner,22
+ Histories,Henry VIII,Garter,1
+ Histories,Henry VIII,Griffith,13
+ Histories,Henry VIII,King Henry VIII,81
+ Histories,Henry VIII,Lord Abergavenny,5
+ Histories,Henry VIII,Lord Chamberlain,38
+ Histories,Henry VIII,Lord Chancellor,7
+ Histories,Henry VIII,Lord Sands,17
+ Histories,Henry VIII,Old Lady,14
+ Histories,Henry VIII,Patience,3
+ Histories,Henry VIII,Porter (door-keeper of the Council-chamber),10
+ Histories,Henry VIII,Queen Katharine,50
+ Histories,Henry VIII,Sir Anthony Denny,3
+ Histories,Henry VIII,Sir Henry Guildford,1
+ Histories,Henry VIII,Sir Nicholas Vaux,1
+ Histories,Henry VIII,Sir Thomas Lovell,21
+ Histories,Henry VIII,Surveyor to the Duke of Buckingham,9
+ Histories,History Of King John,Arthur Duke of Bretagne,23
+ Histories,History Of King John,Blanch,9
+ Histories,History Of King John,Cardinal Pandulph,23
+ Histories,History Of King John,Chatillon,5
+ Histories,History Of King John,Constance,36
+ Histories,History Of King John,Essex,1
+ Histories,History Of King John,Faulconbridge,4
+ Histories,History Of King John,Hubert de Burgh,52
+ Histories,History Of King John,James Gurney,1
+ Histories,History Of King John,King John,95
+ Histories,History Of King John,King Phillip,43
+ Histories,History Of King John,Lady Faulconbridge,5
+ Histories,History Of King John,Lewis the Dauphin,29
+ Histories,History Of King John,Lord Bigot,6
+ Histories,History Of King John,Lymoges duke of Austria,16
+ Histories,History Of King John,Melun,3
+ Histories,History Of King John,Pembroke earl of Pembroke,20
+ Histories,History Of King John,Peter of Pomfret,1
+ Histories,History Of King John,Philip the Bastard,89
+ Histories,History Of King John,Prince Henry,8
+ Histories,History Of King John,Queen Elinor,22
+ Histories,History Of King John,Salisbury earl of Salisbury,36
+ Tragedies,Antony And Cleopatra,Agrippa,28
+ Tragedies,Antony And Cleopatra,Alexas,15
+ Tragedies,Antony And Cleopatra,Antony,202
+ Tragedies,Antony And Cleopatra,Canidius,10
+ Tragedies,Antony And Cleopatra,Captain,1
+ Tragedies,Antony And Cleopatra,Charmian,63
+ Tragedies,Antony And Cleopatra,Cleopatra,204
+ Tragedies,Antony And Cleopatra,Demetrius (Friend to Antony),2
+ Tragedies,Antony And Cleopatra,Dercetas,5
+ Tragedies,Antony And Cleopatra,Diomedes,7
+ Tragedies,Antony And Cleopatra,Dolabella,23
+ Tragedies,Antony And Cleopatra,Domitius Enobarus,113
+ Tragedies,Antony And Cleopatra,Egyptian,2
+ Tragedies,Antony And Cleopatra,Eros,27
+ Tragedies,Antony And Cleopatra,Euphronius,5
+ Tragedies,Antony And Cleopatra,Gallus,1
+ Tragedies,Antony And Cleopatra,Iras,18
+ Tragedies,Antony And Cleopatra,Lepidus,30
+ Tragedies,Antony And Cleopatra,Mardian,7
+ Tragedies,Antony And Cleopatra,Mecaenas,16
+ Tragedies,Antony And Cleopatra,Menas,35
+ Tragedies,Antony And Cleopatra,Menecrates,2
+ Tragedies,Antony And Cleopatra,Octavia,13
+ Tragedies,Antony And Cleopatra,Octavius,98
+ Tragedies,Antony And Cleopatra,Philo,2
+ Tragedies,Antony And Cleopatra,Pompey,41
+ Tragedies,Antony And Cleopatra,Proculeius,10
+ Tragedies,Antony And Cleopatra,Scarus,12
+ Tragedies,Antony And Cleopatra,Seleucus,3
+ Tragedies,Antony And Cleopatra,Silius,3
+ Tragedies,Antony And Cleopatra,Taurus,1
+ Tragedies,Antony And Cleopatra,Thyreus,12
+ Tragedies,Antony And Cleopatra,Varrius,1
+ Tragedies,Antony And Cleopatra,Ventidius,4
+ Tragedies,Coriolanus,Aedile,10
+ Tragedies,Coriolanus,Cominius,67
+ Tragedies,Coriolanus,Coriolanus (Caius Marcius Coriolanus),189
+ Tragedies,Coriolanus,Junius Brutus,91
+ Tragedies,Coriolanus,Lieutenant,4
+ Tragedies,Coriolanus,Menenius Agrippa,162
+ Tragedies,Coriolanus,Patrician,3
+ Tragedies,Coriolanus,Roman,10
+ Tragedies,Coriolanus,Sicinius Velutus,117
+ Tragedies,Coriolanus,Titus Lartius,23
+ Tragedies,Coriolanus,Tullus Aufidius,45
+ Tragedies,Coriolanus,Valeria,14
+ Tragedies,Coriolanus,Virgilia,26
+ Tragedies,Coriolanus,Volsce,9
+ Tragedies,Coriolanus,Volumnia,57
+ Tragedies,Coriolanus,Young Coriolanus,1
+ Tragedies,Cymbeline,Arviragus,46
+ Tragedies,Cymbeline,Belarius,58
+ Tragedies,Cymbeline,Caius Lucius,25
+ Tragedies,Cymbeline,Cloten,77
+ Tragedies,Cymbeline,Cornelius (physician),13
+ Tragedies,Cymbeline,"Cymbeline, King of Britain",81
+ Tragedies,Cymbeline,Guiderius,62
+ Tragedies,Cymbeline,Helen,0
+ Tragedies,Cymbeline,Iachimo,77
+ Tragedies,Cymbeline,Imogen,118
+ Tragedies,Cymbeline,Jupiter,1
+ Tragedies,Cymbeline,Philario,14
+ Tragedies,Cymbeline,Pisanio,58
+ Tragedies,Cymbeline,Posthumus Leonatus,77
+ Tragedies,Cymbeline,Queen,27
+ Tragedies,Cymbeline,Roman Captain,4
+ Tragedies,Cymbeline,Sicilius Leonatus,7
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Bernardo,19
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark","Claudius,  King of Denmark",102
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Cornelius,1
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Father's Ghost,15
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Fortinbras,6
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Francisco ,8
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Gertrude,69
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Guildenstern,29
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Hamlet,358
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Horatio,109
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Laertes,62
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Lucianus,0
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Marcellus,37
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Ophelia,58
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Osric,25
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Polonius,86
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Reynaldo,13
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Rosencrantz,48
+ Tragedies,"The Tragedy of Hamlet,  Prince of Denmark",Voltemand,1
+ Tragedies,Julius Caesar,Antony (Marcus Antonius),51
+ Tragedies,Julius Caesar,Artemidorus of Cnidos,4
+ Tragedies,Julius Caesar,Brutus (Marcus Brutus),194
+ Tragedies,Julius Caesar,Caesar (Julius Caesar),42
+ Tragedies,Julius Caesar,Calpurnia,6
+ Tragedies,Julius Caesar,Casca,39
+ Tragedies,Julius Caesar,Cassius,140
+ Tragedies,Julius Caesar,Cicero,4
+ Tragedies,Julius Caesar,Cinna,11
+ Tragedies,Julius Caesar,Cinna the Poet,8
+ Tragedies,Julius Caesar,Claudius,2
+ Tragedies,Julius Caesar,Clitus,8
+ Tragedies,Julius Caesar,Dardanius,3
+ Tragedies,Julius Caesar,Decius Brutus,12
+ Tragedies,Julius Caesar,Flavius,5
+ Tragedies,Julius Caesar,Lepidus (Marcus Antonius Lepidus),3
+ Tragedies,Julius Caesar,Ligarius,5
+ Tragedies,Julius Caesar,Lucilius,10
+ Tragedies,Julius Caesar,Lucius,24
+ Tragedies,Julius Caesar,Marullus,6
+ Tragedies,Julius Caesar,Messala,20
+ Tragedies,Julius Caesar,Metellus Cimber,5
+ Tragedies,Julius Caesar,Octavius (Octavius Caesar),19
+ Tragedies,Julius Caesar,Pindarus,5
+ Tragedies,Julius Caesar,Popilius (Popilius Lena),2
+ Tragedies,Julius Caesar,Portia (wife of Brutus),16
+ Tragedies,Julius Caesar,Publius,2
+ Tragedies,Julius Caesar,Strato,4
+ Tragedies,Julius Caesar,Tintinius,10
+ Tragedies,Julius Caesar,Trebonius,4
+ Tragedies,Julius Caesar,Varro,6
+ Tragedies,Julius Caesar,Volumnius,3
+ Tragedies,Julius Caesar,Young Cato,3
+ Tragedies,King Lear,Cordelia,31
+ Tragedies,King Lear,Curan,4
+ Tragedies,King Lear,Duke of Albany,58
+ Tragedies,King Lear,Duke of Burgundy,5
+ Tragedies,King Lear,Duke of Cornwall,53
+ Tragedies,King Lear,Earl of Gloucester,118
+ Tragedies,King Lear,Earl of Kent,127
+ Tragedies,King Lear,Edgar,98
+ Tragedies,King Lear,Edmund,79
+ Tragedies,King Lear,Goneril,53
+ Tragedies,King Lear,King of France,5
+ Tragedies,King Lear,Lear,188
+ Tragedies,King Lear,Oswald,38
+ Tragedies,King Lear,Regan,73
+ Tragedies,The Tragedy Of Macbeth,Angus,4
+ Tragedies,The Tragedy Of Macbeth,Banquo,33
+ Tragedies,The Tragedy Of Macbeth,Caithness,3
+ Tragedies,The Tragedy Of Macbeth,Donalbain,3
+ Tragedies,The Tragedy Of Macbeth,Duncan,18
+ Tragedies,The Tragedy Of Macbeth,Fleance,2
+ Tragedies,The Tragedy Of Macbeth,Hecate,2
+ Tragedies,The Tragedy Of Macbeth,Lady Macbeth,59
+ Tragedies,The Tragedy Of Macbeth,Lady Macduff,19
+ Tragedies,The Tragedy Of Macbeth,Lennox,21
+ Tragedies,The Tragedy Of Macbeth,Macbeth,146
+ Tragedies,The Tragedy Of Macbeth,Macduff,59
+ Tragedies,The Tragedy Of Macbeth,Malcolm,40
+ Tragedies,The Tragedy Of Macbeth,Menteith,5
+ Tragedies,The Tragedy Of Macbeth,Porter,4
+ Tragedies,The Tragedy Of Macbeth,Ross,39
+ Tragedies,The Tragedy Of Macbeth,Seyton,5
+ Tragedies,The Tragedy Of Macbeth,Siward,11
+ Tragedies,The Tragedy Of Macbeth,Son (Macduff's son),14
+ Tragedies,The Tragedy Of Macbeth,Young Siward,4
+ Tragedies,The Tragedy Of Othello,Bianca (Mistress to Cassio),15
+ Tragedies,The Tragedy Of Othello,Brabantio,30
+ Tragedies,The Tragedy Of Othello,Cassio,110
+ Tragedies,The Tragedy Of Othello,Desdemona,165
+ Tragedies,The Tragedy Of Othello,Duke of Venice,25
+ Tragedies,The Tragedy Of Othello,Emilia,103
+ Tragedies,The Tragedy Of Othello,Gratiano (Brother to Brabantio),20
+ Tragedies,The Tragedy Of Othello,Iago,272
+ Tragedies,The Tragedy Of Othello,Lodovico,33
+ Tragedies,The Tragedy Of Othello,Montano,24
+ Tragedies,The Tragedy Of Othello,Othello,274
+ Tragedies,The Tragedy Of Othello,Roderigo,59
+ Tragedies,Romeo And Juliet,Abraham,5
+ Tragedies,Romeo And Juliet,Balthasar (Servant to Romeo),12
+ Tragedies,Romeo And Juliet,Benvolio,64
+ Tragedies,Romeo And Juliet,Capulet,51
+ Tragedies,Romeo And Juliet,Friar John,4
+ Tragedies,Romeo And Juliet,Friar Laurence,55
+ Tragedies,Romeo And Juliet,Gregory,15
+ Tragedies,Romeo And Juliet,Juliet,118
+ Tragedies,Romeo And Juliet,Lady Capulet,45
+ Tragedies,Romeo And Juliet,Lady Montague,2
+ Tragedies,Romeo And Juliet,Mercutio,62
+ Tragedies,Romeo And Juliet,Montague,10
+ Tragedies,Romeo And Juliet,Paris,23
+ Tragedies,Romeo And Juliet,Peter (Servant to Juliet's Nurse),13
+ Tragedies,Romeo And Juliet,Prince Escalus,16
+ Tragedies,Romeo And Juliet,Romeo,163
+ Tragedies,Romeo And Juliet,Sampson,20
+ Tragedies,Romeo And Juliet,Tybalt,17
