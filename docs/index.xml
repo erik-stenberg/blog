@@ -12,11 +12,48 @@
     
     
     <item>
+      <title>Shakespeare</title>
+      <link>/post/shakespeare/</link>
+      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/shakespeare/</guid>
+      <description>library(readr) getwd() ## [1] &amp;quot;/Users/erik/Documents/blog/data&amp;quot; suppressMessages(Shakespeare &amp;lt;- read_csv(&amp;quot;Shakespeare.csv&amp;quot;)) library(treemap) treemap(Shakespeare, index=(c(&amp;quot;Play_ID&amp;quot;)), vSize=&amp;quot;nLines&amp;quot;) library(dplyr) Shakespeare %&amp;gt;% group_by(Play_ID) %&amp;gt;% summarise(s = sum(nLines)) %&amp;gt;% arrange(desc(s)) ## # A tibble: 17 x 2 ## Play_ID s ## &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt; ## 1 The Tragedy Of Othello 1130 ## 2 The Tragedy of Hamlet, Prince of Denmark 1046 ## 3 Antony And Cleopatra 1016 ## 4 King Lear 930 ## 5 Coriolanus 828 ## 6 Taming Of The Shrew 795 ## 7 As You Like It 793 ## 8 Cymbeline 745 ## 9 Romeo And Juliet 695 ## 10 Julius Caesar 676 ## 11 Merchant Of Venice 630 ## 12 The Tempest 628 ## 13 Henry VIII 596 ## 14 Comedy Of Errors 578 ## 15 History Of King John 527 ## 16 Midsummer Night&amp;#39;s Dream 498 ## 17 The Tragedy Of Macbeth 491 library(sunburstR) str2 = Shakespeare %&amp;gt;% mutate(str = paste0(&amp;quot;Type:&amp;quot;,Type,&amp;quot;-&amp;quot;,&amp;quot;Play:&amp;quot;,Play_ID,&amp;quot;-&amp;quot;,&amp;quot;Character:&amp;quot;,Character_ID)) %&amp;gt;% select(str, nLines) sunburst(str2)      Legend     {&#34;</description>
+    </item>
+    
+    <item>
+      <title>Shakespeare</title>
+      <link>/post/testing/</link>
+      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/testing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>asdf</title>
       <link>/post/asdf/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/asdf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jag</title>
+      <link>/post/jag/</link>
+      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/jag/</guid>
+      <description>asdf
+\[x^2\]</description>
+    </item>
+    
+    <item>
+      <title>testing</title>
+      <link>/post/testing/</link>
+      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/testing/</guid>
       <description></description>
     </item>
     
