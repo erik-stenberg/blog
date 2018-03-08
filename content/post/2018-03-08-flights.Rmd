@@ -45,7 +45,7 @@ m <- m %>%
 
 
 globejs(arcs=m[,2:5], long=airports[,8],lat=airports[,7],value=0.1,arcsHeight=0.23, arcsLwd=0.01, arcsColor=m$color, color="white",arcsOpacity=.25, emissive="black",
-        atmosphere=TRUE, height=500, width = 500, bodycolor="white")
+        atmosphere=TRUE, height=500, width = 500, bodycolor='white')
 
 ```
 
