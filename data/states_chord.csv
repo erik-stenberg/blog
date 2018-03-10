@@ -1,0 +1,52 @@
+ID,Region,States,Color
+1,Northeast,Connecticut,#4D4D4D
+2,Northeast,Maine,#4D4D4D
+3,Northeast,Massachusetts,#4D4D4D
+4,Northeast,New Hampshire,#4D4D4D
+5,Northeast,Rhode Island,#4D4D4D
+6,Northeast,Vermont,#4D4D4D
+7,Northeast,New Jersey,#4D4D4D
+8,Northeast,New York,#4D4D4D
+9,Northeast,Pennsylvania,#4D4D4D
+10,Midwest,Illinois,#009900
+11,Midwest,Indiana,#009900
+12,Midwest,Michigan,#009900
+13,Midwest,Ohio,#009900
+14,Midwest,Wisconsin,#009900
+15,Midwest,Iowa,#009900
+16,Midwest,Kansas,#009900
+17,Midwest,Minnesota,#009900
+18,Midwest,Missouri,#009900
+19,Midwest,Nebraska,#009900
+20,Midwest,North Dakota,#009900
+21,Midwest,South Dakota,#009900
+22,South,Delaware,#FF481D
+23,South,Florida,#FF481D
+24,South,Georgia,#FF481D
+25,South,Maryland,#FF481D
+26,South,North Carolina,#FF481D
+27,South,South Carolina,#FF481D
+28,South,Virginia,#FF481D
+29,South,District of Columbia,#FF481D
+30,South,West Virginia,#FF481D
+31,South,Alabama,#FF481D
+32,South,Kentucky,#FF481D
+33,South,Mississippi,#FF481D
+34,South,Tennessee,#FF481D
+35,South,Arkansas,#FF481D
+36,South,Louisiana,#FF481D
+37,South,Oklahoma,#FF481D
+38,South,Texas,#FF481D
+39,West,Arizona,#3399FF
+40,West,Colorado,#3399FF
+41,West,Idaho,#3399FF
+42,West,Montana,#3399FF
+43,West,Nevada,#3399FF
+44,West,New Mexico,#3399FF
+45,West,Utah,#3399FF
+46,West,Wyoming,#3399FF
+47,West,Alaska,#3399FF
+48,West,California,#3399FF
+49,West,Hawaii,#3399FF
+50,West,Oregon,#3399FF
+51,West,Washington,#3399FF

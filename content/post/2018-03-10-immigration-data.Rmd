@@ -1,0 +1,63 @@
+---
+title: "Immigration data visualisation"
+author: "Erik"
+date: '2018-03-10'
+slug: immigration-data
+tags: []
+categories: []
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = "/Users/erik/Documents/blog/data")
+```
+
+In this post I will be visualizing the migration pattern of the US with data from 2012 using a chord diagram from the chorddiag package which in turn is using the JavaScript visualization library D3.
+The data I'm going to use are stored in two files.  
+
+```{r, message=F, warning=F}
+library(readr)
+library(tidyverse)
+dat <- read_csv("migration2016.csv")
+states <- read_csv("states_chord.csv")
+head(dat[1:5],5)
+```
+
+We can for example see that 423 people moved from Alabama to Alaska. The `states` data set contains regions, states and colors that I plan to use for the chord diagram. 
+
+To prepare the data for the package, I need a matrix and some further data manipulation to get the data in the right order.
+
+```{r, message=F}
+library(reshape)
+dat <- melt(as.data.frame(dat),id.vars = c("To"))
+colnames(dat) <- c("To","From","value")
+merged = merge(x=dat, y=states, by.x="From", by.y="States")
+colnames(merged)[4] = "ID_From"
+merged = merge(merged, states, by.x = "To", by.y="States")
+colnames(merged)[7] <- "ID_To"
+merged <- merged %>% arrange(ID_From) %>% arrange(ID_To)
+done <- matrix(merged$value,byrow = T, nrow=51)
+colnames(done) <- unique(merged$To) ; rownames(done) <- unique(merged$To)
+```
+
+Let's take a look at the top left corner of the 52 times 52 matrix
+
+```{r}
+head(done[,1:5],5)
+```
+
+
+And finally the diagram is created.
+```{r}
+library(chorddiag)
+groupNames = unique(merged$To)
+colnames(done) <- groupNames
+row.names(done) <- groupNames
+groupColors <- merged$Color.x
+done[is.na(done)]<-0
+
+chorddiag(done,groupColors = groupColors, showTicks = F, width = 700, height = 700)
+
+
+```
+
+

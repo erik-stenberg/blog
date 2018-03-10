@@ -6,19 +6,19 @@
     <description>Recent content on erst</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 08 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 10 Mar 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Airline routes Shiny App</title>
-      <link>/post/flights/</link>
-      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
+      <title>Immigration data visualisation</title>
+      <link>/post/immigration-data/</link>
+      <pubDate>Sat, 10 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/flights/</guid>
-      <description>In this post I am going to create a simple Shiny app that will show different airlines and their routes. First of all I will pick three airlines and create a plot, and from there incoroprate it into a Shiny app with a few inputs. The data are from openflights.org.
-airports &amp;lt;- read.csv(&amp;quot;airports.dat&amp;quot;, header=FALSE, stringsAsFactors=FALSE) colnames(airports) &amp;lt;- c(&amp;quot;airport_id&amp;quot;, &amp;quot;name&amp;quot;, &amp;quot;city&amp;quot;, &amp;quot;country&amp;quot;, &amp;quot;IATA_FAA&amp;quot;, &amp;quot;ICAO&amp;quot;, &amp;quot;latitude&amp;quot;, &amp;quot;longitude&amp;quot;, &amp;quot;altitude&amp;quot;, &amp;quot;timezone&amp;quot;, &amp;quot;DST&amp;quot;) airports &amp;lt;- subset(airports, IATA_FAA !</description>
+      <guid>/post/immigration-data/</guid>
+      <description>In this post I will be visualizing the migration pattern of the US with data from 2012 using a chord diagram from the chorddiag package which in turn is using the JavaScript visualization library D3. The data I’m going to use are stored in two files.
+library(readr) library(tidyverse) dat &amp;lt;- read_csv(&amp;quot;migration2016.csv&amp;quot;) states &amp;lt;- read_csv(&amp;quot;states_chord.csv&amp;quot;) head(dat[1:5],5) ## # A tibble: 5 x 5 ## To Alabama Alaska Arizona Arkansas ## &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; ## 1 Alabama NA 576 1022 495 ## 2 Alaska 423 NA 1176 65 ## 3 Arizona 894 1946 NA 1205 ## 4 Arkansas 2057 103 836 NA ## 5 California 3045 4206 33757 4282 We can for example see that 423 people moved from Alabama to Alaska.</description>
     </item>
     
     <item>
@@ -28,6 +28,16 @@ airports &amp;lt;- read.csv(&amp;quot;airports.dat&amp;quot;, header=FALSE, stri
       
       <guid>/post/shakespeare/</guid>
       <description>library(readr) suppressMessages(Shakespeare &amp;lt;- read_csv(&amp;quot;Shakespeare.csv&amp;quot;)) library(treemap) treemap(Shakespeare, index=(c(&amp;quot;Play_ID&amp;quot;)), vSize=&amp;quot;nLines&amp;quot;) library(dplyr) Shakespeare %&amp;gt;% group_by(Play_ID) %&amp;gt;% summarise(s = sum(nLines)) %&amp;gt;% arrange(desc(s)) ## # A tibble: 17 x 2 ## Play_ID s ## &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt; ## 1 The Tragedy Of Othello 1130 ## 2 The Tragedy of Hamlet, Prince of Denmark 1046 ## 3 Antony And Cleopatra 1016 ## 4 King Lear 930 ## 5 Coriolanus 828 ## 6 Taming Of The Shrew 795 ## 7 As You Like It 793 ## 8 Cymbeline 745 ## 9 Romeo And Juliet 695 ## 10 Julius Caesar 676 ## 11 Merchant Of Venice 630 ## 12 The Tempest 628 ## 13 Henry VIII 596 ## 14 Comedy Of Errors 578 ## 15 History Of King John 527 ## 16 Midsummer Night&amp;#39;s Dream 498 ## 17 The Tragedy Of Macbeth 491 library(sunburstR) str2 = Shakespeare %&amp;gt;% mutate(str = paste0(&amp;quot;Type:&amp;quot;,Type,&amp;quot;-&amp;quot;,&amp;quot;Play:&amp;quot;,Play_ID,&amp;quot;-&amp;quot;,&amp;quot;Character:&amp;quot;,Character_ID)) %&amp;gt;% select(str, nLines) sunburst(str2)      Legend     {&#34;</description>
+    </item>
+    
+    <item>
+      <title>Shiny App: Airline routes</title>
+      <link>/post/flights/</link>
+      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/flights/</guid>
+      <description>In this post I am going to create a simple Shiny app that will show different airlines and their routes. First of all I will pick three airlines and create a plot, and from there incoroprate it into a Shiny app with a few inputs. The data are from openflights.org.
+airports &amp;lt;- read.csv(&amp;quot;airports.dat&amp;quot;, header=FALSE, stringsAsFactors=FALSE) colnames(airports) &amp;lt;- c(&amp;quot;airport_id&amp;quot;, &amp;quot;name&amp;quot;, &amp;quot;city&amp;quot;, &amp;quot;country&amp;quot;, &amp;quot;IATA_FAA&amp;quot;, &amp;quot;ICAO&amp;quot;, &amp;quot;latitude&amp;quot;, &amp;quot;longitude&amp;quot;, &amp;quot;altitude&amp;quot;, &amp;quot;timezone&amp;quot;, &amp;quot;DST&amp;quot;) airports &amp;lt;- subset(airports, IATA_FAA !</description>
     </item>
     
   </channel>
