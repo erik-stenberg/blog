@@ -46,7 +46,7 @@ head(done[,1:5],5)
 ```
 
 
-And finally the diagram is created.
+And finally the diagram is created. Hovering a specific 
 ```{r}
 library(chorddiag)
 groupNames = unique(merged$To)
@@ -55,7 +55,10 @@ row.names(done) <- groupNames
 groupColors <- merged$Color.x
 done[is.na(done)]<-0
 
-chorddiag(done,groupColors = groupColors, showTicks = F, width = 700, height = 700)
+chorddiag(done,groupColors = groupColors,
+          showTicks = F,
+          width = 700,
+          height = 700)
 
 
 ```
