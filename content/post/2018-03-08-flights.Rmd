@@ -11,21 +11,26 @@ knitr::opts_knit$set(root.dir = "/Users/erik/Documents/blog/data")
 devtools::install_github("bwlewis/rthreejs")
 ```
 
+Import the data and rename column names
 ```{r}
-# Display all flights in the world
 airports <- read.csv("airports.dat", header=FALSE, stringsAsFactors=FALSE)
 colnames(airports) <- c("airport_id", "name", "city", "country", "IATA_FAA", "ICAO", "latitude", "longitude", "altitude", "timezone", "DST")
 airports <- subset(airports, IATA_FAA != '')
 flights <- read.csv("routes.dat", header=FALSE, stringsAsFactors=FALSE)
 colnames(flights) <- c("airline", "airline_id", "source_air", "source_air_id", "dest_air", "dest_air_id","code_share", "stops", "equipment")
+```
 
+Select three airlines. EK: Emirates, LH: Lufthansa, DL: Delta
+```{r}
 
-################### a)
 suppressMessages(library(dplyr))
 flights <- flights %>% 
   filter(airline %in% c("EK","LH","DL"))
+
 ```
 
+
+Prepare data for the `globejs()` function
 ```{r}
 suppressMessages(library(threejs))
 f1 <- flights %>% select(airline, source_air, dest_air)
@@ -45,7 +50,8 @@ m <- m %>%
 
 
 globejs(arcs=m[,2:5], long=airports[,8],lat=airports[,7],value=0.1,arcsHeight=0.23, arcsLwd=0.01, arcsColor=m$color, color="white",arcsOpacity=.25, emissive="black",
-        atmosphere=TRUE, height=500, width = 500, bodycolor='white')
+        atmosphere=TRUE, height=700, width = 700, bodycolor='white')
 
 ```
 
+<iframe src="https://erst.shinyapps.io/flights/",width="800" height="800"></iframe>
