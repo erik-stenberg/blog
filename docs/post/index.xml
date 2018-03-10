@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Hugo Tanka Theme</title>
+    <title>Posts on erst</title>
     <link>/post/</link>
-    <description>Recent content in Posts on Hugo Tanka Theme</description>
+    <description>Recent content in Posts on erst</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 08 Mar 2018 00:00:00 +0000</lastBuildDate>
@@ -17,7 +17,7 @@
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/flights/</guid>
-      <description>In this post I am going to create a simple Shiny app that will show different airlines and their routes in a normal year. First of all I will pick three airlines and create a plot, and from there incoroprate it into a Shiny app with a few inputs. The data are from openflights.org.
+      <description>In this post I am going to create a simple Shiny app that will show different airlines and their routes. First of all I will pick three airlines and create a plot, and from there incoroprate it into a Shiny app with a few inputs. The data are from openflights.org.
 airports &amp;lt;- read.csv(&amp;quot;airports.dat&amp;quot;, header=FALSE, stringsAsFactors=FALSE) colnames(airports) &amp;lt;- c(&amp;quot;airport_id&amp;quot;, &amp;quot;name&amp;quot;, &amp;quot;city&amp;quot;, &amp;quot;country&amp;quot;, &amp;quot;IATA_FAA&amp;quot;, &amp;quot;ICAO&amp;quot;, &amp;quot;latitude&amp;quot;, &amp;quot;longitude&amp;quot;, &amp;quot;altitude&amp;quot;, &amp;quot;timezone&amp;quot;, &amp;quot;DST&amp;quot;) airports &amp;lt;- subset(airports, IATA_FAA !</description>
     </item>
     

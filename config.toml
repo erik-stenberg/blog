@@ -1,7 +1,7 @@
 baseurl = "/"
 publishDir = "docs"
-title = "Hugo Tanka Theme"
-author = "Nan Xiao"
+title = "erst"
+author = "Erik Stenberg"
 canonifyurls = true
 languagecode = "en"
 theme = "hugo-tanka"
@@ -16,25 +16,18 @@ pygmentscodefences = true
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [params]
-  sitename = "Hugo Tanka Theme"
+  sitename = "erst"
 
 [[menu.main]]
-    name = "Home"
-    url = "https://nanx.me"
+    name = "Stack"
+    url = "https://stackoverflow.com/users/7520285/shitoushan"
     weight = 1
 [[menu.main]]
     name = "GitHub"
-    url = "https://github.com/road2stat"
+    url = "https://github.com/shitoushan"
     weight = 2
 [[menu.main]]
     name = "LinkedIn"
-    url = "https://www.linkedin.com/in/road2stat"
+    url = "www.linkedin.com/in/erikstenb"
     weight = 3
-[[menu.main]]
-    name = "Twitter"
-    url = "https://twitter.com/road2stat"
-    weight = 4
-[[menu.main]]
-    name = "RSS"
-    url = "/index.xml"
-    weight = 5
+
