@@ -34,4 +34,4 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 [[menu.main]]
     name = "Resume"
     url = "https://drive.google.com/open?id=1gJBtFpPVv9OwTYuf6AAdCADWIGEQrzKg
-    weight = 3
+    weight = 4
