@@ -31,3 +31,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     url = "www.linkedin.com/in/erikstenb"
     weight = 3
 
+[[menu.main]]
+    name = "Resume"
+    url = "https://drive.google.com/open?id=1gJBtFpPVv9OwTYuf6AAdCADWIGEQrzKg
+    weight = 3
