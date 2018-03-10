@@ -26,10 +26,6 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     name = "GitHub"
     url = "https://github.com/shitoushan"
     weight = 2
-[[menu.main]]
-    name = "LinkedIn"
-    url = "www.linkedin.com/in/erikstenb"
-    weight = 4
 
 [[menu.main]]
     name = "Resume"
