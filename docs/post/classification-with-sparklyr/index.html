@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  
+
+  <link rel="icon" type="image/png" href="/favicon.png">
+
+  <title>
+    
+    
+     Classification with sparklyr 
+    
+  </title>
+  <link rel="canonical" href="/post/classification-with-sparklyr/">
+
+  <link rel="stylesheet" href="/css/fonts.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+
+  
+</head>
+
+<body>
+<section id=nav>
+  <h1><a href="/">erst</a></h1>
+  <ul>
+    
+    <li><a href="https://stackoverflow.com/users/7520285/shitoushan">Stack</a></li>
+    
+    <li><a href="https://github.com/shitoushan">GitHub</a></li>
+    
+    <li><a href="www.linkedin.com/in/erikstenb">LinkedIn</a></li>
+    
+  </ul>
+</section>
+
+
+<section id=content>
+  <h1> Classification with sparklyr </h1>
+
+  <div id=sub-header>
+    erik · 2018/03/10 · 4 minute read
+  </div>
+
+  <div class="entry-content">
+    <p>In this post I will use fairly new R package sparklyr which allows you to connect from Spark with R to use Spark’s machine learning library. All with a complete dplyr backend. To connect to a local instance of Spark, you first need to <code>spark_install</code> and then connect to that instance with <code>spark_connect</code> where the master argument should be “local”</p>
+<p>I will use the flights data from nycflights13 package to try to predict flights that will be delayed. As I import the data, I also create a new weekday variable</p>
+<pre class="r"><code>library(sparklyr)
+library(dplyr)
+sc &lt;- spark_connect(master = &quot;local&quot;, version=&quot;2.1.0&quot;)</code></pre>
+<pre class="r"><code>flights_data &lt;- nycflights13::flights %&gt;% 
+  mutate(weekday=weekdays(as.Date(paste0(year,&quot;-&quot;,month,&quot;-&quot;,day))))</code></pre>
+<p>To upload this data frame into my local instance, use <code>copy_to()</code></p>
+<pre class="r"><code>flights_sdf &lt;- copy_to(dest = sc, df = flights_data, name = &quot;name&quot;, overwrite=T)</code></pre>
+<p>Then, I create a new variable i) <code>Delay</code> is 1 if the plane was delayed, ii) <code>Car</code> is 1 if the flights is flewn by one of the four selected carreirs, iii) <code>Night</code> that is 1 if the the departure was after 6 pm or earlier than 6am and iv) <code>Weekend</code>if the departure was on a Sunday.</p>
+<pre class="r"><code>flights_sdf = flights_sdf %&gt;% 
+  mutate(Delay = if_else(dep_delay&gt;0,1,0)) %&gt;%                           # (i)
+  mutate(Car = if_else(carrier %in% c(&quot;DL&quot;,&quot;US&quot;,&quot;DH&quot;,&quot;UA&quot;),1,0)) %&gt;%     # (ii)
+  mutate(Night = if_else(hour&gt;=18 | hour&lt;=6,1,0)) %&gt;%                    # (iii)
+  mutate(Weekend = if_else(weekday==&quot;Sunday&quot;,1,0))                       # (iv)</code></pre>
+<p>I create a new data frame <code>logit_sdf</code> with the constructed variables, and exluce all missing values</p>
+<pre class="r"><code>logit_sdf = flights_sdf %&gt;% 
+  mutate(DepHour = hour) %&gt;% 
+  select(Delay, Car, Night, Weekend, DepHour) %&gt;% 
+  na.omit()</code></pre>
+<pre><code>## * Dropped 8255 rows with &#39;na.omit&#39; (336776 =&gt; 328521)</code></pre>
+<p>I divide the dataset into two parts, one for training and one for testing, and then fit the binary logistic regression model with the Spark Machine Learning function <code>ml_logistic_regression</code></p>
+<pre class="r"><code>partitions &lt;- sdf_partition(logit_sdf, training=0.7, test=0.3, seed=6789)
+trainset &lt;- partitions$training
+testset &lt;- partitions$test
+ml_model &lt;- trainset %&gt;% ml_logistic_regression(formula = Delay ~ DepHour + Car + Night + Weekend)
+summary(ml_model)</code></pre>
+<pre><code>## Call: ml_logistic_regression.tbl_spark(., formula = Delay ~ DepHour + Car + Night + Weekend)  
+## 
+## Coefficients:
+## (Intercept)     DepHour         Car       Night     Weekend 
+## -1.88682995  0.11464268 -0.06620449 -0.19125631 -0.08851651</code></pre>
+<p>Prediction is done with <code>sdf_predict</code>. Also a matrix with TP = True positive, FP = False positive, TN = True negative, FN = False negative. For now, I consider the cut-off value for when we would classify a predicted probability as a delay to be 0.5. The model falsely predict roughly 29 thousand flights as delayed when they were in fact not.</p>
+<pre class="r"><code>predvals &lt;- sdf_predict(x = testset,model = ml_model)      
+
+
+score_test &lt;- predvals %&gt;% 
+  mutate(Event = if_else(probability_1_0 &gt;= 0.5,1,0)) %&gt;%   
+  mutate(TP = if_else(Event==1 &amp; Delay==1, 1, 0)) %&gt;%       
+  mutate(FP = if_else(Event==1 &amp; Delay==0, 1, 0)) %&gt;%       
+  mutate(FN = if_else(Event==0 &amp; Delay==1, 1, 0)) %&gt;%       
+  mutate(TN = if_else(Event==0 &amp; Delay==0, 1, 0))%&gt;%        
+  summarise(nTP = sum(TP, na.rm=T),
+            nFP = sum(FP, na.rm=T),
+            nFN = sum(FN, na.rm=T),
+            nTN = sum(TN, na.rm=T)) %&gt;%                     
+  select(nTP,nFP,nFN,nTN)                                   
+
+mat &lt;- t(matrix(score_test %&gt;% collect(),ncol=2,byrow=T,dimnames=list(
+  c(&quot;TRUE&quot;, &quot;FALSE&quot;),
+  c(&quot;Predicted: TRUE&quot;, &quot;Predicted: FALSE&quot;)
+)))
+
+mat</code></pre>
+<pre><code>##                  TRUE FALSE
+## Predicted: TRUE  9640 28893
+## Predicted: FALSE 8734 51136</code></pre>
+<p>Instead of using a specific cut-off value as above, it is better to look at a ROC-curve. Here I use the previous code to construct a function <code>calc_roc</code> that will output the sensitivity and specificity of the model given a specified cut-off value. I will then loop through a sequence of different cut-off values and see how sensitivity and specificity changes for different cut-off values. A much more rigorous method of evaluating the model.</p>
+<pre class="r"><code>calc_roc &lt;- function(x, k=0.5){                               
+ 
+  x &lt;- x %&gt;% 
+    mutate(Event = if_else(probability_1_0 &gt;= k, 1, 0)) %&gt;%  
+    mutate(TP = if_else(Event == 1 &amp; Delay==1, 1, 0)) %&gt;%     
+    mutate(TN = if_else(Event == 0 &amp; Delay==0, 1, 0)) %&gt;%     
+    mutate(P = if_else(Delay == 1, 1, 0 )) %&gt;%                
+    mutate(N = if_else(Delay == 0, 1, 0)) %&gt;%                 
+    summarise(n1 = sum(TP, na.rm = T),
+              n2 = sum(P, na.rm = T),
+              n3 = sum(TN, na.rm = T),
+              n4 = sum(N, na.rm = T)) %&gt;%                    
+    summarise(val1 = n1/n2,
+              val2 = n3/n4) %&gt;%                              
+    
+    select(Sensitivity = val1, Specificity = val2)
+  
+  return(x)                                                
+  }
+
+
+pred &lt;- predvals %&gt;% collect
+perf&lt;-vector()  
+
+for(i in seq(0,1,by=0.01)){
+  perf &lt;- rbind(perf, do.call(calc_roc, list(pred,i)))
+}
+
+colnames(perf) &lt;- c(&quot;Sensitivity&quot;,&quot;Specificity&quot;)</code></pre>
+<p>The result can then be plotted using ggplot2.</p>
+<pre class="r"><code>library(ggplot2)
+ggplot(perf, aes(x=1-Specificity, y=Sensitivity))+
+  geom_line(col=&quot;blue&quot;,lwd=2)+
+  geom_segment(aes(x=0,xend=1,y=0,yend=1),linetype=2)</code></pre>
+<p><img src="/post/2018-03-10-classification-with-sparklyr_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+
+  </div>
+
+  <div id=links>
+    
+      <a class="basic-alignment left" href="/post/comparison-of-different-classification-methods/">&laquo; Comparison of different classification methods</a>
+    
+    
+  </div>
+</section>
+
+<section id="comments">
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+      
+      
+      if (window.location.hostname == "localhost")
+                return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = '';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+  
+  
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+</body>
+</html>
+

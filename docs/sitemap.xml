@@ -3,6 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/post/classification-with-sparklyr/</loc>
+    <lastmod>2018-03-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/comparison-of-different-classification-methods/</loc>
+    <lastmod>2018-03-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/post/immigration-data/</loc>
     <lastmod>2018-03-10T00:00:00+00:00</lastmod>
   </url>

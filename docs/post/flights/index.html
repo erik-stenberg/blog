@@ -56,7 +56,7 @@
 <script src="/rmarkdown-libs/globe-binding/globe.js"></script>
 
 
-<p>In this post I am going to create a simple Shiny app that will show different airlines and their routes. First of all I will pick three airlines and create a plot, and from there incoroprate it into a Shiny app with a few inputs. The data <a href="https://www.theguardian.com/news/datablog/2010/jul/16/data-plural-singular," title="Data is or data are?">are</a> from openflights.org.</p>
+<p>In this post I am going to create a simple Shiny app that will show different airlines and their routes. First of all I will pick three airlines and create a plot, and from there incoroprate it into a Shiny app with a few inputs. The data <a href="https://www.theguardian.com/news/datablog/2010/jul/16/data-plural-singular," title="Data is or data are?">are</a> from openflights.org. The package I will use for the visualization is threejs which is a package part of the <a href="https://threejs.org">three.js project</a>.</p>
 <pre class="r"><code>airports &lt;- read.csv(&quot;airports.dat&quot;, header=FALSE, stringsAsFactors=FALSE)
 colnames(airports) &lt;- c(&quot;airport_id&quot;, &quot;name&quot;, &quot;city&quot;, &quot;country&quot;, &quot;IATA_FAA&quot;, &quot;ICAO&quot;, &quot;latitude&quot;, &quot;longitude&quot;, &quot;altitude&quot;, &quot;timezone&quot;, &quot;DST&quot;)
 airports &lt;- subset(airports, IATA_FAA != &#39;&#39;)

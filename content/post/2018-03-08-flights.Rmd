@@ -8,10 +8,9 @@ categories: []
 ---
 ```{r setup, include=FALSE}
 knitr::opts_knit$set(root.dir = "/Users/erik/Documents/blog/data")
-#devtools::install_github("bwlewis/rthreejs")
 ```
 
-In this post I am going to create a simple Shiny app that will show different airlines and their routes. First of all I will pick three airlines and create a plot, and from there incoroprate it into a Shiny app with a few inputs. The data [are](https://www.theguardian.com/news/datablog/2010/jul/16/data-plural-singular, "Data is or data are?") from openflights.org. 
+In this post I am going to create a simple Shiny app that will show different airlines and their routes. First of all I will pick three airlines and create a plot, and from there incoroprate it into a Shiny app with a few inputs. The data [are](https://www.theguardian.com/news/datablog/2010/jul/16/data-plural-singular, "Data is or data are?") from openflights.org. The package I will use for the visualization is threejs which is a package part of the [three.js project](https://threejs.org).
 
 ```{r}
 airports <- read.csv("airports.dat", header=FALSE, stringsAsFactors=FALSE)

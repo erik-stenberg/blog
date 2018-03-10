@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  
+
+  <link rel="icon" type="image/png" href="/favicon.png">
+
+  <title>
+    
+    
+     Comparison of different classification methods 
+    
+  </title>
+  <link rel="canonical" href="/post/comparison-of-different-classification-methods/">
+
+  <link rel="stylesheet" href="/css/fonts.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+
+  
+</head>
+
+<body>
+<section id=nav>
+  <h1><a href="/">erst</a></h1>
+  <ul>
+    
+    <li><a href="https://stackoverflow.com/users/7520285/shitoushan">Stack</a></li>
+    
+    <li><a href="https://github.com/shitoushan">GitHub</a></li>
+    
+    <li><a href="www.linkedin.com/in/erikstenb">LinkedIn</a></li>
+    
+  </ul>
+</section>
+
+
+<section id=content>
+  <h1> Comparison of different classification methods </h1>
+
+  <div id=sub-header>
+    erik · 2018/03/10 · 3 minute read
+  </div>
+
+  <div class="entry-content">
+    <p>In this post I’ll be comparing a set of classification algorithms to perform a rather simple task, classify emails as either spam or not spam. To begin with, I’ll look at logit and probit models.</p>
+<div id="the-data" class="section level2">
+<h2>The data</h2>
+<p>The original dataset can be found <a href="https://archive.ics.uci.edu/ml/datasets/spambase">here</a> and was published by UCI Machine Learning Repository. The data consist 4601 emails of which 1813 are spam. The data does not actually consist of emails, but rather 57 predictor variables, which can be divided into three types. Word frequency, character frequency and capital letters. Type one is about proportions of words. For example, one of the predictors are the proportion of the word “free” and another one is the proportion of the word “receive”. Surely, we’d expect a higher proportion of these words would increase the possibility of the email being spam. A full list of all the variables can be found <a href="https://archive.ics.uci.edu/ml/machine-learning-databases/spambase/spambase.names">here</a>. How these predictors were selected is of course of interest, but I will not consider that here. Import the data like this</p>
+<pre class="r"><code>spamdata &lt;- read_csv(&quot;spambase.data.txt&quot;, 
+    col_names = FALSE)</code></pre>
+</div>
+<div id="logit-probit" class="section level2">
+<h2>Logit &amp; Probit</h2>
+<p>For the logit and probit, the way the predictions are made is simply that we will consider an email a spam if the predicted probability is larger than some constant <span class="math inline">\(k\)</span>, i.e.</p>
+<p><span class="math display">\[\text{Pr}\,(\,\tilde{y} \,|\, x\,) &gt; k\]</span></p>
+<p>I will rename the binary response variable <code>X58</code> to <code>spam</code> for clearity and then quickly inspect the data, and I drop the column 41 since 145 observations contain missing values for that single variable.</p>
+<pre class="r"><code>spamdata &lt;- spamdata %&gt;% 
+  mutate(spam = X58) %&gt;% 
+  select(-X58,X41)</code></pre>
+<p>The <span class="math inline">\(\texttt{caret}\)</span> package has a useful function <code>createDataPartition</code> which creates an index of which observations to use for training, when using the proportion <code>p</code>for training, whilst keeping the same proportion of spams in the train data and the test data as the original dataset.</p>
+<pre class="r"><code>set.seed(1234)
+trainIndex &lt;- createDataPartition(spamdata$spam, p = .8, list = FALSE)
+train &lt;- spamdata[trainIndex,]
+test &lt;- spamdata[-trainIndex,]</code></pre>
+<div id="modelling" class="section level3">
+<h3>Modelling</h3>
+<p>And to actually fit the models, I will simply use the <code>glm</code> function of the <span class="math inline">\(\texttt{stats}\)</span> package, and for the predictions, we use the <code>predict</code>function.</p>
+<pre class="r"><code>probit &lt;- glm(spam~., family=binomial(link=&quot;probit&quot;), data=train)
+logit &lt;- glm(spam~., family=binomial(link=&quot;logit&quot;), data=train)
+predict.probit &lt;- predict(probit, test, type=&quot;response&quot;)
+predict.logit &lt;- predict(logit, test, type=&quot;response&quot;)</code></pre>
+</div>
+<div id="evaluation" class="section level3">
+<h3>Evaluation</h3>
+<p>We can choose a value <span class="math inline">\(k\)</span> for the prediction evaluation, and table all the predicted probabilities, and see how many were correctly predicted to be above the threshold.</p>
+<pre class="r"><code>table(test$spam, predict.probit &gt; 0.5)</code></pre>
+<pre><code>##    
+##     FALSE TRUE
+##   0   517   14
+##   1    35  318</code></pre>
+<p>We can see that the probit model correctly classifies <span class="math inline">\(325\)</span> of the <span class="math inline">\(325+49\)</span> spams, and falsely predicts 29 non-spam emails as spam, which is probably the most undesirable feature of the model. Rather let a spam pass into the mailbox than falsely classifying an email as spam while it is not. A more useful thing to do is to plot ROC curves. For this we can create ROC objects, with the function <code>roc</code> from the <span class="math inline">\(\texttt{pROC}\)</span> package,</p>
+<pre class="r"><code>test$prob.logit &lt;- predict.logit
+test$prob.probit &lt;- predict.probit
+roc.logit &lt;- roc(spam ~ prob.logit, data = test)
+roc.probit &lt;- roc(spam ~ prob.probit, data = test)</code></pre>
+<p>Now even though the base <code>plot</code> function has a method for <code>roc</code> class objects which makes them easy to plot, <span class="math inline">\(\texttt{pROC}\)</span> has a separate function which uses <span class="math inline">\(\texttt{ggplot2}\)</span>. For that we just need to put them in a list</p>
+<pre class="r"><code>models &lt;- list(Logit=roc.logit, Probit=roc.probit)
+ggroc(models, lwd=1.3)+
+  ggtitle(&quot;Logit vs. Probit ROC Curves&quot;)+
+  labs(color=&#39;Model&#39;) </code></pre>
+<p><img src="/post/2018-03-10-comparison-of-different-classification-methods_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+</div>
+<div id="support-vector-machine" class="section level2">
+<h2>Support Vector Machine</h2>
+<pre class="r"><code>## finding optimal value of a tuning parameter
+sigDist &lt;- sigest(spam ~ ., data = train, frac = 1)
+### creating a grid of two tuning parameters, .sigma comes from the earlier line. we are trying to find best value of .C
+svmTuneGrid &lt;- data.frame(sigma = sigDist[1], C = 2^(-2:7))</code></pre>
+<pre><code>## Warning in data.frame(sigma = sigDist[1], C = 2^(-2:7)): row names were
+## found from a short variable and have been discarded</code></pre>
+</div>
+
+  </div>
+
+  <div id=links>
+    
+      <a class="basic-alignment left" href="/post/immigration-data/">&laquo; Migration Data Visualisation</a>
+    
+    
+      <a class="basic-alignment left" href="/post/classification-with-sparklyr/">Classification with sparklyr &raquo;</a>
+    
+  </div>
+</section>
+
+<section id="comments">
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+      
+      
+      if (window.location.hostname == "localhost")
+                return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = '';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+  
+  
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+</body>
+</html>
+

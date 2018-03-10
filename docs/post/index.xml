@@ -12,6 +12,26 @@
     
     
     <item>
+      <title>Classification with sparklyr</title>
+      <link>/post/classification-with-sparklyr/</link>
+      <pubDate>Sat, 10 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/classification-with-sparklyr/</guid>
+      <description>In this post I will use fairly new R package sparklyr which allows you to connect from Spark with R to use Spark’s machine learning library. All with a complete dplyr backend. To connect to a local instance of Spark, you first need to spark_install and then connect to that instance with spark_connect where the master argument should be “local”
+I will use the flights data from nycflights13 package to try to predict flights that will be delayed.</description>
+    </item>
+    
+    <item>
+      <title>Comparison of different classification methods</title>
+      <link>/post/comparison-of-different-classification-methods/</link>
+      <pubDate>Sat, 10 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/comparison-of-different-classification-methods/</guid>
+      <description>In this post I’ll be comparing a set of classification algorithms to perform a rather simple task, classify emails as either spam or not spam. To begin with, I’ll look at logit and probit models.
+The data The original dataset can be found here and was published by UCI Machine Learning Repository. The data consist 4601 emails of which 1813 are spam. The data does not actually consist of emails, but rather 57 predictor variables, which can be divided into three types.</description>
+    </item>
+    
+    <item>
       <title>Migration Data Visualisation</title>
       <link>/post/immigration-data/</link>
       <pubDate>Sat, 10 Mar 2018 00:00:00 +0000</pubDate>
@@ -36,8 +56,7 @@ library(readr) library(tidyverse) dat &amp;lt;- read_csv(&amp;quot;migration2016
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/flights/</guid>
-      <description>In this post I am going to create a simple Shiny app that will show different airlines and their routes. First of all I will pick three airlines and create a plot, and from there incoroprate it into a Shiny app with a few inputs. The data are from openflights.org.
-airports &amp;lt;- read.csv(&amp;quot;airports.dat&amp;quot;, header=FALSE, stringsAsFactors=FALSE) colnames(airports) &amp;lt;- c(&amp;quot;airport_id&amp;quot;, &amp;quot;name&amp;quot;, &amp;quot;city&amp;quot;, &amp;quot;country&amp;quot;, &amp;quot;IATA_FAA&amp;quot;, &amp;quot;ICAO&amp;quot;, &amp;quot;latitude&amp;quot;, &amp;quot;longitude&amp;quot;, &amp;quot;altitude&amp;quot;, &amp;quot;timezone&amp;quot;, &amp;quot;DST&amp;quot;) airports &amp;lt;- subset(airports, IATA_FAA !</description>
+      <description>In this post I am going to create a simple Shiny app that will show different airlines and their routes. First of all I will pick three airlines and create a plot, and from there incoroprate it into a Shiny app with a few inputs. The data are from openflights.org. The package I will use for the visualization is threejs which is a package part of the three.</description>
     </item>
     
   </channel>

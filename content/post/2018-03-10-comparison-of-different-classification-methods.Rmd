@@ -1,0 +1,106 @@
+---
+title: Comparison of different classification methods
+author: erik
+date: '2018-03-10'
+slug: comparison-of-different-classification-methods
+categories: []
+tags: []
+---
+
+
+```{r "setup", include=FALSE}
+knitr::opts_knit$set(root.dir = "/Users/erik/Documents/blog/data")
+```
+
+In this post I'll be comparing a set of classification algorithms to perform a rather simple task, classify emails as either spam or not spam. To begin with, I'll look at logit and probit models. 
+
+
+```{r, include=F}
+library(readr)
+library(tidyverse)
+library(caret)
+library(pROC)
+library(doMC)
+library(kernlab)
+```
+
+
+
+## The data
+The original dataset can be found [here](https://archive.ics.uci.edu/ml/datasets/spambase) and was published by UCI Machine Learning Repository. The data consist 4601 emails of which 1813 are spam. The data does not actually consist of emails, but rather 57 predictor variables, which can be divided into three types. Word frequency, character frequency and capital letters. Type one is about proportions of words. For example, one of the predictors are the proportion of the word "free" and another one is the proportion of the word "receive". Surely, we'd expect a higher proportion of these words would increase the possibility of the email being spam. A full list of all the variables can be found [here](https://archive.ics.uci.edu/ml/machine-learning-databases/spambase/spambase.names). How these predictors were selected is of course of interest, but I will not consider that here. Import the data like this
+
+```{r, message=F, warning=F}
+spamdata <- read_csv("spambase.data.txt", 
+    col_names = FALSE)
+```
+
+
+## Logit & Probit
+For the logit and probit, the way the predictions are made is simply that we will consider an email a spam if the predicted probability is larger than some constant $k$, i.e.
+
+$$\text{Pr}\,(\,\tilde{y} \,|\, x\,) > k$$
+
+I will rename the binary response variable `X58` to `spam` for clearity and then quickly inspect the data, and I drop the column 41 since 145 observations contain missing values for that single variable.
+
+```{r}
+spamdata <- spamdata %>% 
+  mutate(spam = X58) %>% 
+  select(-X58,X41)
+```
+
+The $\texttt{caret}$ package has a useful function `createDataPartition` which creates an index of which observations to use for training, when using the proportion `p`for training, whilst keeping the same proportion of spams in the train data and the test data as the original dataset.
+
+```{r}
+set.seed(1234)
+trainIndex <- createDataPartition(spamdata$spam, p = .8, list = FALSE)
+train <- spamdata[trainIndex,]
+test <- spamdata[-trainIndex,]
+```
+
+### Modelling
+
+And to actually fit the models, I will simply use the `glm` function of the $\texttt{stats}$ package, and for the predictions, we use the `predict`function. 
+
+```{r, warning=F}
+probit <- glm(spam~., family=binomial(link="probit"), data=train)
+logit <- glm(spam~., family=binomial(link="logit"), data=train)
+predict.probit <- predict(probit, test, type="response")
+predict.logit <- predict(logit, test, type="response")
+```
+
+
+### Evaluation 
+We can choose a value $k$ for the prediction evaluation, and table all the predicted probabilities, and see how many were correctly predicted to be above the threshold. 
+```{r}
+table(test$spam, predict.probit > 0.5)
+```
+
+We can see that the probit model correctly classifies $325$ of the $325+49$ spams, and falsely predicts 29 non-spam emails as spam, which is probably the most undesirable feature of the model. Rather let a spam pass into the mailbox than falsely classifying an email as spam while it is not. 
+A more useful thing to do is to plot ROC curves. For this we can create ROC objects, with the function `roc` from the $\texttt{pROC}$ package,
+
+
+```{r}
+test$prob.logit <- predict.logit
+test$prob.probit <- predict.probit
+roc.logit <- roc(spam ~ prob.logit, data = test)
+roc.probit <- roc(spam ~ prob.probit, data = test)
+```
+
+Now even though the base `plot` function has a method for `roc` class objects which makes them easy to plot, $\texttt{pROC}$ has a separate function which uses $\texttt{ggplot2}$. For that we just need to put them in a list
+
+```{r}
+models <- list(Logit=roc.logit, Probit=roc.probit)
+ggroc(models, lwd=1.3)+
+  ggtitle("Logit vs. Probit ROC Curves")+
+  labs(color='Model') 
+```
+
+## Support Vector Machine
+
+```{r}
+
+## finding optimal value of a tuning parameter
+sigDist <- sigest(spam ~ ., data = train, frac = 1)
+### creating a grid of two tuning parameters, .sigma comes from the earlier line. we are trying to find best value of .C
+svmTuneGrid <- data.frame(sigma = sigDist[1], C = 2^(-2:7))
+```
