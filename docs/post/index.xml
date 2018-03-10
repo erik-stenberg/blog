@@ -12,14 +12,13 @@
     
     
     <item>
-      <title>Flights</title>
+      <title>Airline routes Shiny App</title>
       <link>/post/flights/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/flights/</guid>
-      <description>Import the data and rename column names
-airports &amp;lt;- read.csv(&amp;quot;airports.dat&amp;quot;, header=FALSE, stringsAsFactors=FALSE) colnames(airports) &amp;lt;- c(&amp;quot;airport_id&amp;quot;, &amp;quot;name&amp;quot;, &amp;quot;city&amp;quot;, &amp;quot;country&amp;quot;, &amp;quot;IATA_FAA&amp;quot;, &amp;quot;ICAO&amp;quot;, &amp;quot;latitude&amp;quot;, &amp;quot;longitude&amp;quot;, &amp;quot;altitude&amp;quot;, &amp;quot;timezone&amp;quot;, &amp;quot;DST&amp;quot;) airports &amp;lt;- subset(airports, IATA_FAA != &amp;#39;&amp;#39;) flights &amp;lt;- read.csv(&amp;quot;routes.dat&amp;quot;, header=FALSE, stringsAsFactors=FALSE) colnames(flights) &amp;lt;- c(&amp;quot;airline&amp;quot;, &amp;quot;airline_id&amp;quot;, &amp;quot;source_air&amp;quot;, &amp;quot;source_air_id&amp;quot;, &amp;quot;dest_air&amp;quot;, &amp;quot;dest_air_id&amp;quot;,&amp;quot;code_share&amp;quot;, &amp;quot;stops&amp;quot;, &amp;quot;equipment&amp;quot;) Select three airlines. EK: Emirates, LH: Lufthansa, DL: Delta
-suppressMessages(library(dplyr)) flights &amp;lt;- flights %&amp;gt;% filter(airline %in% c(&amp;quot;EK&amp;quot;,&amp;quot;LH&amp;quot;,&amp;quot;DL&amp;quot;)) Prepare data for the globejs() function</description>
+      <description>In this post I am going to create a simple Shiny app that will show different airlines and their routes in a normal year. First of all I will pick three airlines and create a plot, and from there incoroprate it into a Shiny app with a few inputs. The data are from openflights.org.
+airports &amp;lt;- read.csv(&amp;quot;airports.dat&amp;quot;, header=FALSE, stringsAsFactors=FALSE) colnames(airports) &amp;lt;- c(&amp;quot;airport_id&amp;quot;, &amp;quot;name&amp;quot;, &amp;quot;city&amp;quot;, &amp;quot;country&amp;quot;, &amp;quot;IATA_FAA&amp;quot;, &amp;quot;ICAO&amp;quot;, &amp;quot;latitude&amp;quot;, &amp;quot;longitude&amp;quot;, &amp;quot;altitude&amp;quot;, &amp;quot;timezone&amp;quot;, &amp;quot;DST&amp;quot;) airports &amp;lt;- subset(airports, IATA_FAA !</description>
     </item>
     
     <item>
