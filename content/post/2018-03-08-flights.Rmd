@@ -1,5 +1,5 @@
 ---
-title: "Airline routes Shiny App"
+title: "Shiny App: Airline routes"
 author: "Erik"
 date: '2018-03-08'
 slug: flights
@@ -59,7 +59,7 @@ globejs(arcs=m[,2:5], long=airports[,8],lat=airports[,7],value=0.1,arcsHeight=0.
 Now we can turn this into a shiny app with a few inputs, for example which airlines to use etc. This is a static page created with blogdown, and since shiny apps depend on a live R session, I've deployed the following app to shinyapps.io. Below is the code used to create the app and [HERE](https://erst.shinyapps.io/flights/) is a link to the app. I've also included the app in a frame on this page.
 
 ```{r, eval=F}
-devtools::install_github("bwlewis/rthreejs")
+#devtools::install_github("bwlewis/rthreejs")
 library(threejs)
 library(shiny)
 library(dplyr)
@@ -72,9 +72,16 @@ ui <- fluidPage(
   theme = shinytheme("cyborg"),
   
 
-   # Sidebar with a slider input for number of bins 
+      # Sidebar with a slider input for number of bins 
    sidebarLayout(
       sidebarPanel(
+        
+        tags$div(class = "header", checked = NA,
+             tags$b("Select maximum three airlines using their IATA codes"),
+             tags$br(),
+             tags$em("i.e. Lufthansa: LH, Turkish: TK")
+        ),
+        
         uiOutput("airSelector"),
         sliderInput(inputId="height",label="Height:", min = 1, max = 5, value=1),
          sliderInput(inputId="width",label="Width:", min = 1, max = 5, value=1),
@@ -84,7 +91,10 @@ ui <- fluidPage(
          tags$div(class = "header", checked = NA,
                   tags$a(href = "http://www.sterlingtravel.co.uk/airline_list.html", "Airline names and corresponding IATA codes"))
          
+         
+
       ),
+      
       
       
       # Show a plot of the generated distribution
@@ -93,6 +103,8 @@ ui <- fluidPage(
       )
    )
 )
+
+
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
@@ -103,11 +115,15 @@ server <- function(input, output) {
   flights <- read.csv("./data/routes.dat", header=FALSE, stringsAsFactors=FALSE)
   colnames(flights) <- c("airline", "airline_id", "source_air", "source_air_id", "dest_air", "dest_air_id","code_share", "stops", "equipment")
   
-  # Create the list of different airlines to choose from in the UI
+  ### for select options
   output$airSelector <- renderUI({
-    selectizeInput(inputId = "selectAirline", label = "Select maximum three airline companies IATA code",multiple = T, options = list(maxItems = 3), choices=rev(unique(flights$airline))) 
+    selectizeInput(inputId = "selectAirline",
+                   label = " ", 
+                   multiple = T,
+                   options = list(maxItems = 3, placeholder = 'Ex: LH SK TK'),
+                   choices=rev(unique(flights$airline))) 
   })
-
+  
   
    output$flightPlot <- renderGlobe({
 
@@ -142,13 +158,16 @@ server <- function(input, output) {
              atmosphere=input$atmos,
              bodycolor='white',
              fov=35, lightcolor="grey",
-             rotationlong=42, rotationlat=57)
+             rotationlong=42, rotationlat=57,
+             bg = "#060606")
 
    })
 }
 
 # Run the application 
 shinyApp(ui = ui, server = server)
+
+
 
 
 ```
