@@ -12,7 +12,7 @@
     
     
     <item>
-      <title>Immigration data visualisation</title>
+      <title>Migration Data Visualisation</title>
       <link>/post/immigration-data/</link>
       <pubDate>Sat, 10 Mar 2018 00:00:00 +0000</pubDate>
       
@@ -31,7 +31,7 @@ library(readr) library(tidyverse) dat &amp;lt;- read_csv(&amp;quot;migration2016
     </item>
     
     <item>
-      <title>Shiny App: Airline routes</title>
+      <title>Shiny App: Airline Routes</title>
       <link>/post/flights/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
