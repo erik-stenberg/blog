@@ -66,12 +66,12 @@ library(shinythemes)
 library(shinydashboard)
 
 
-# Define UI for application that draws a histogram
+# Define UI
 ui <- fluidPage(
   theme = shinytheme("cyborg"),
   
 
-      # Sidebar with a slider input for number of bins 
+      # Sidebar 
    sidebarLayout(
       sidebarPanel(
         
@@ -96,7 +96,7 @@ ui <- fluidPage(
       
       
       
-      # Show a plot of the generated distribution
+      # Main panel
       mainPanel(
          globeOutput("flightPlot", width = "100%", height = "1000px")
       )
@@ -105,7 +105,7 @@ ui <- fluidPage(
 
 
 
-# Define server logic required to draw a histogram
+# Define server logic
 server <- function(input, output) {
 
   airports <- read.csv("./data/airports.dat", header=FALSE, stringsAsFactors=FALSE)
@@ -114,7 +114,7 @@ server <- function(input, output) {
   flights <- read.csv("./data/routes.dat", header=FALSE, stringsAsFactors=FALSE)
   colnames(flights) <- c("airline", "airline_id", "source_air", "source_air_id", "dest_air", "dest_air_id","code_share", "stops", "equipment")
   
-  ### for select options
+  # For select options
   output$airSelector <- renderUI({
     selectizeInput(inputId = "selectAirline",
                    label = " ", 

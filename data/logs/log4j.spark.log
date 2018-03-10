@@ -20907,3 +20907,13 @@ FROM `sparklyr_tmp_297c387d6152`
 18/03/10 20:33:46 INFO SparkContext: Successfully stopped SparkContext
 18/03/10 20:33:46 INFO ShutdownHookManager: Shutdown hook called
 18/03/10 20:33:46 INFO ShutdownHookManager: Deleting directory /private/var/folders/ly/jwh1_hf12_97wmdzy1skxl0h0000gn/T/spark-83e46fa1-2043-4dc2-9a47-e14b60b1f251
+18/03/10 20:42:37 INFO SparkContext: Invoking stop() from shutdown hook
+18/03/10 20:42:37 INFO SparkUI: Stopped Spark web UI at http://127.0.0.1:4040
+18/03/10 20:42:37 INFO MapOutputTrackerMasterEndpoint: MapOutputTrackerMasterEndpoint stopped!
+18/03/10 20:42:37 INFO MemoryStore: MemoryStore cleared
+18/03/10 20:42:37 INFO BlockManager: BlockManager stopped
+18/03/10 20:42:37 INFO BlockManagerMaster: BlockManagerMaster stopped
+18/03/10 20:42:37 INFO OutputCommitCoordinator$OutputCommitCoordinatorEndpoint: OutputCommitCoordinator stopped!
+18/03/10 20:42:37 INFO SparkContext: Successfully stopped SparkContext
+18/03/10 20:42:37 INFO ShutdownHookManager: Shutdown hook called
+18/03/10 20:42:37 INFO ShutdownHookManager: Deleting directory /private/var/folders/ly/jwh1_hf12_97wmdzy1skxl0h0000gn/T/spark-7cd3687d-fec8-45cc-a403-cfd7b15bc5e6

@@ -97,12 +97,12 @@ library(shinythemes)
 library(shinydashboard)
 
 
-# Define UI for application that draws a histogram
+# Define UI
 ui &lt;- fluidPage(
   theme = shinytheme(&quot;cyborg&quot;),
   
 
-      # Sidebar with a slider input for number of bins 
+      # Sidebar 
    sidebarLayout(
       sidebarPanel(
         
@@ -127,7 +127,7 @@ ui &lt;- fluidPage(
       
       
       
-      # Show a plot of the generated distribution
+      # Main panel
       mainPanel(
          globeOutput(&quot;flightPlot&quot;, width = &quot;100%&quot;, height = &quot;1000px&quot;)
       )
@@ -136,7 +136,7 @@ ui &lt;- fluidPage(
 
 
 
-# Define server logic required to draw a histogram
+# Define server logic
 server &lt;- function(input, output) {
 
   airports &lt;- read.csv(&quot;./data/airports.dat&quot;, header=FALSE, stringsAsFactors=FALSE)
@@ -145,7 +145,7 @@ server &lt;- function(input, output) {
   flights &lt;- read.csv(&quot;./data/routes.dat&quot;, header=FALSE, stringsAsFactors=FALSE)
   colnames(flights) &lt;- c(&quot;airline&quot;, &quot;airline_id&quot;, &quot;source_air&quot;, &quot;source_air_id&quot;, &quot;dest_air&quot;, &quot;dest_air_id&quot;,&quot;code_share&quot;, &quot;stops&quot;, &quot;equipment&quot;)
   
-  ### for select options
+  # For select options
   output$airSelector &lt;- renderUI({
     selectizeInput(inputId = &quot;selectAirline&quot;,
                    label = &quot; &quot;, 
