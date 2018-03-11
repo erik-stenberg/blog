@@ -1,0 +1,105 @@
+---
+title: Python in knitr
+author: Erik
+date: '2018-03-11'
+slug: python-test
+categories: []
+tags: []
+---
+
+
+
+<p>In this post I’ll try to render Python with blogdown, which I haven’t done before. Hopefully it’ll work just as smooth as Jupyter notebook. By default, blogdown uses the System installed version of Python, and to force blogdown to use Python 3, which I want, I need to include</p>
+<pre class="r"><code>knitr::opts_chunk$set(engine.path = &quot;/Users/erik/anaconda/bin/python&quot;)</code></pre>
+<p>I will use Monte Carlo integration to approximate the integral</p>
+<p><span class="math display">\[E_f(g(p)) = P(D|M_k) = \int f(\textbf{p})g(\textbf{p})d\textbf{p}\]</span> using the fact that we can simulate <span class="math display">\[p_1,...,p_n\]</span> from <span class="math display">\[f(p_1,...,p,5)|M)\]</span> and use the strong law of large numbers to obtain</p>
+<p><span class="math display">\[\frac{1}{n}\sum_{i=1}^n   g(p_i) \rightarrow \text{E}_f(g(\textbf{p}))\]</span></p>
+<pre class="python"><code>import numpy as np
+n = 1000
+M_3 = 0
+y = 0
+for i in range(n):
+    p1 = np.random.uniform(high=1,low=0,size=1)
+    p2 = np.random.uniform(high=1,low=p1,size=1)
+    p3 = np.random.uniform(high=1,low=p2,size=1)
+    p4 = np.random.uniform(high=p3,low=0,size=1)
+    p5 = np.random.uniform(high=p4,low=0,size=1)
+    prod = \
+    p1**0*(1-p1)**(3-0) * \
+    p2**1*(1-p2)**(6-1) * \
+    p3**4*(1-p3)**(12-4) * \
+    p4**3*(1-p4)**(6-3) * \
+    p5**0*(1-p5)**(0-0)
+     
+    y = prod
+    
+    M_3 += y
+    
+M_3 = M_3/n
+M_2 = 0
+y = 0
+for i in range(n):
+    p1 = np.random.uniform(high=1,low=0,size=1)
+    p2 = np.random.uniform(high=p1,low=0,size=1)
+    p3 = np.random.uniform(high=p2,low=0,size=1)
+    p4 = np.random.uniform(high=p3,low=0,size=1)
+    p5 = np.random.uniform(high=p4,low=0,size=1)
+    prod = \
+    p1**0*(1-p1)**(3-0) * \
+    p2**1*(1-p2)**(6-1) * \
+    p3**4*(1-p3)**(12-4) * \
+    p4**3*(1-p4)**(6-3) * \
+    p5**0*(1-p5)**(0-0)
+        
+    y = prod
+    
+    M_2 += y
+    
+M_2 = M_2/n
+M_1 = 0
+y = 0
+for i in range(n):
+    p1 = np.random.uniform(high=1,low=0,size=1)
+    p2 = np.random.uniform(high=1,low=p1,size=1)
+    p3 = np.random.uniform(high=1,low=p2,size=1)
+    p4 = np.random.uniform(high=1,low=p3,size=1)
+    p5 = np.random.uniform(high=1,low=p4,size=1)
+    prod = \
+    p1**0*(1-p1)**(3-0) * \
+    p2**1*(1-p2)**(6-1) * \
+    p3**4*(1-p3)**(12-4) * \
+    p4**3*(1-p4)**(6-3) * \
+    p5**0*(1-p5)**(0-0)
+        
+    y = prod
+    
+    M_1 += y
+    
+M_1 = M_1/n
+print(M_1/(M_1+M_2+M_3),M_2/(M_1+M_2+M_3),M_3/(M_1+M_2+M_3))</code></pre>
+<pre><code>## [ 0.53107102] [ 0.10313943] [ 0.36578956]</code></pre>
+<p>So the posterior probability that model <span class="math inline">\(M_3\)</span> is true is</p>
+<p><span class="math display">\[P(M_1|D) = \frac{P(D|M_1)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)} \approx 0.54\]</span></p>
+<p><span class="math display">\[P(M_2|D) = \frac{P(D|M_2)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)} \approx 0.07\]</span></p>
+<p><span class="math display">\[P(M_3|D) = \frac{P(D|M_3)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)} \approx 0.38\]</span></p>
+<p>And to test the brand new blogdown addin insert image</p>
+<pre class="python"><code>import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.mlab
+n=100000
+d = np.zeros((n,5))
+for i in range(n):
+        d[[i],[0]] = np.random.uniform(high=1,low=0,size=1)
+        d[[i],[1]] = np.random.uniform(high=1,low=d[[i],[0]],size=1)
+        d[[i],[2]] = np.random.uniform(high=1,low=d[[i],[1]],size=1)
+        d[[i],[3]] = np.random.uniform(high=1,low=d[[i],[2]],size=1)
+        d[[i],[4]] = np.random.uniform(high=1,low=d[[i],[3]],size=1)
+        
+#datf = pd.DataFrame(d, columns= [&#39;p1&#39;,&#39;p2&#39;,&#39;p3&#39;,&#39;p4&#39;,&#39;p5&#39;])
+#axa = datf.plot(kind=&quot;density&quot;, title=&quot;Model 1 - prior density functions&quot;)
+#axa.figure.savefig(&#39;foo.png&#39;)</code></pre>
+<div class="figure">
+<img src="/post/2018-03-11-python-test_files/foo.png" />
+
+</div>

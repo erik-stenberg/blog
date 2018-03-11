@@ -34,7 +34,7 @@
     
     <li><a href="https://github.com/shitoushan">GitHub</a></li>
     
-    <li><a href="www.linkedin.com/in/erikstenb">LinkedIn</a></li>
+    <li><a href="http://nbviewer.jupyter.org/github/shitoushan/blog/blob/master/files/CV.pdf">Resume</a></li>
     
   </ul>
 </section>
@@ -57,7 +57,7 @@ sc &lt;- spark_connect(master = &quot;local&quot;, version=&quot;2.1.0&quot;)</c
   mutate(weekday=weekdays(as.Date(paste0(year,&quot;-&quot;,month,&quot;-&quot;,day))))</code></pre>
 <p>To upload this data frame into my local instance, use <code>copy_to()</code></p>
 <pre class="r"><code>flights_sdf &lt;- copy_to(dest = sc, df = flights_data, name = &quot;name&quot;, overwrite=T)</code></pre>
-<p>Then, I create a new variable i) <code>Delay</code> is 1 if the plane was delayed, ii) <code>Car</code> is 1 if the flights is flewn by one of the four selected carreirs, iii) <code>Night</code> that is 1 if the the departure was after 6 pm or earlier than 6am and iv) <code>Weekend</code>if the departure was on a Sunday.</p>
+<p>Then, I create a new variable i) <code>Delay</code> is 1 if the plane was delayed, ii) <code>Car</code> is 1 if the flights is flown by one of the four selected carreirs, iii) <code>Night</code> that is 1 if the the departure was after 6 pm or earlier than 6am and iv) <code>Weekend</code>if the departure was on a Sunday.</p>
 <pre class="r"><code>flights_sdf = flights_sdf %&gt;% 
   mutate(Delay = if_else(dep_delay&gt;0,1,0)) %&gt;%                           # (i)
   mutate(Car = if_else(carrier %in% c(&quot;DL&quot;,&quot;US&quot;,&quot;DH&quot;,&quot;UA&quot;),1,0)) %&gt;%     # (ii)
@@ -148,6 +148,8 @@ ggplot(perf, aes(x=1-Specificity, y=Sensitivity))+
     
       <a class="basic-alignment left" href="/post/comparison-of-different-classification-methods/">&laquo; Comparison of different classification methods</a>
     
+    
+      <a class="basic-alignment left" href="/post/python-test/">Python in knitr &raquo;</a>
     
   </div>
 </section>

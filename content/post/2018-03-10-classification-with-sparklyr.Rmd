@@ -32,7 +32,7 @@ To upload this data frame into my local instance, use `copy_to()`
 flights_sdf <- copy_to(dest = sc, df = flights_data, name = "name", overwrite=T)
 ```
 
-Then, I create a new variable i) `Delay` is 1 if the plane was delayed, ii) `Car` is 1 if the flights is flewn by one of the four selected carreirs, iii) `Night` that is 1 if the the departure was after 6 pm or earlier than 6am and iv) `Weekend`if the departure was on a Sunday. 
+Then, I create a new variable i) `Delay` is 1 if the plane was delayed, ii) `Car` is 1 if the flights is flown by one of the four selected carreirs, iii) `Night` that is 1 if the the departure was after 6 pm or earlier than 6am and iv) `Weekend`if the departure was on a Sunday. 
 ```{r}
 flights_sdf = flights_sdf %>% 
   mutate(Delay = if_else(dep_delay>0,1,0)) %>%                           # (i)

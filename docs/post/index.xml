@@ -6,10 +6,21 @@
     <description>Recent content in Posts on erst</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 10 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 11 Mar 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Python in knitr</title>
+      <link>/post/python-test/</link>
+      <pubDate>Sun, 11 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/python-test/</guid>
+      <description>In this post I’ll try to render Python with blogdown, which I haven’t done before. Hopefully it’ll work just as smooth as Jupyter notebook. By default, blogdown uses the System installed version of Python, and to force blogdown to use Python 3, which I want, I need to include
+knitr::opts_chunk$set(engine.path = &amp;quot;/Users/erik/anaconda/bin/python&amp;quot;) I will use Monte Carlo integration to approximate the integral
+\[E_f(g(p)) = P(D|M_k) = \int f(\textbf{p})g(\textbf{p})d\textbf{p}\] using the fact that we can simulate \[p_1,.</description>
+    </item>
     
     <item>
       <title>Classification with sparklyr</title>
