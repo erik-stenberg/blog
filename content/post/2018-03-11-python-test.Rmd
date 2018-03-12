@@ -1,10 +1,10 @@
 ---
-title: Python in knitr
-author: Erik
+title: "Python in knitr"
+author: "Erik"
 date: '2018-03-11'
 slug: python-test
-categories: []
 tags: []
+categories: []
 ---
 
 ```{r, setup, echo=FALSE}
@@ -110,13 +110,13 @@ print(M_1/(M_1+M_2+M_3),M_2/(M_1+M_2+M_3),M_3/(M_1+M_2+M_3))
 ```
 
 
-So the posterior probability that model $M_3$ is true is
+These are the posterior probabilities that model $M_3$ is true, i.e.
 
-$$P(M_1|D) = \frac{P(D|M_1)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)} \approx 0.54$$
+$$P(M_1|D) = \frac{P(D|M_1)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)} $$
 
-$$P(M_2|D) = \frac{P(D|M_2)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)} \approx 0.07$$
+$$P(M_2|D) = \frac{P(D|M_2)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)}$$
 
-$$P(M_3|D) = \frac{P(D|M_3)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)} \approx 0.38$$
+$$P(M_3|D) = \frac{P(D|M_3)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)}$$
 
 And to test the brand new blogdown addin insert image
 
@@ -140,6 +140,5 @@ for i in range(n):
 #axa = datf.plot(kind="density", title="Model 1 - prior density functions")
 #axa.figure.savefig('foo.png')
 ```
-
 
 ![](/post/2018-03-11-python-test_files/foo.png)

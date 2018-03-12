@@ -1,10 +1,10 @@
 ---
-title: Python in knitr
-author: Erik
+title: "Python in knitr"
+author: "Erik"
 date: '2018-03-11'
 slug: python-test
-categories: []
 tags: []
+categories: []
 ---
 
 
@@ -77,11 +77,11 @@ for i in range(n):
     
 M_1 = M_1/n
 print(M_1/(M_1+M_2+M_3),M_2/(M_1+M_2+M_3),M_3/(M_1+M_2+M_3))</code></pre>
-<pre><code>## [ 0.53107102] [ 0.10313943] [ 0.36578956]</code></pre>
-<p>So the posterior probability that model <span class="math inline">\(M_3\)</span> is true is</p>
-<p><span class="math display">\[P(M_1|D) = \frac{P(D|M_1)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)} \approx 0.54\]</span></p>
-<p><span class="math display">\[P(M_2|D) = \frac{P(D|M_2)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)} \approx 0.07\]</span></p>
-<p><span class="math display">\[P(M_3|D) = \frac{P(D|M_3)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)} \approx 0.38\]</span></p>
+<pre><code>## [ 0.50945306] [ 0.07081507] [ 0.41973187]</code></pre>
+<p>These are the posterior probabilities that model <span class="math inline">\(M_3\)</span> is true, i.e.</p>
+<p><span class="math display">\[P(M_1|D) = \frac{P(D|M_1)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)} \]</span></p>
+<p><span class="math display">\[P(M_2|D) = \frac{P(D|M_2)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)}\]</span></p>
+<p><span class="math display">\[P(M_3|D) = \frac{P(D|M_3)P(M_k)}{\sum_{j=1}^J P(D|M_j)P(M_j)}\]</span></p>
 <p>And to test the brand new blogdown addin insert image</p>
 <pre class="python"><code>import numpy as np
 import pandas as pd
