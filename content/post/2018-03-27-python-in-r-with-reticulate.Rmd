@@ -1,0 +1,9 @@
+---
+title: Python in R with reticulate
+author: Erik
+date: '2018-03-27'
+slug: python-in-r-with-reticulate
+categories: []
+tags: []
+---
+

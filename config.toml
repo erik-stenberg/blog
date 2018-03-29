@@ -28,6 +28,6 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     weight = 2
 
 [[menu.main]]
-    name = "Resume"
-    url = "http://nbviewer.jupyter.org/github/shitoushan/blog/blob/master/files/CV.pdf"
+    name = "LinkedIn"
+    url = "www.linkedin.com/in/erikstenb"
     weight = 3
