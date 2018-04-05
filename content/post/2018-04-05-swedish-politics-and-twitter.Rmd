@@ -22,7 +22,7 @@ The package is very easy to use for downloading tweets, both from invidiual acco
 rt <- rtweet::search_tweets("#svpol", n = 100, include_rts = FALSE)
 ```
 
-Let's look at the last five tweets and see what we can figure out about them. For example, we can see their twitter names, the actual tweets and profile picture URL
+Let's look at the last 3 tweets and see what we can figure out about them. For example, we can see their twitter names, the actual tweets and profile picture URL
 
 ```{r}
 head(rt$screen_name,3)
@@ -39,7 +39,7 @@ head(colnames(rt),20)
 
 ## Plotting activity over time
 
-Let's begin with looking at the twitter activity. I will be using ggplot and plotly. I first create a function that downloads all the parties into a list of datasets. I then rbind them, fix labels and colours so that they correspond to the traditional colors used for the parties, fix the dates and plot.
+Let's visualize twitter activity. I will download the last 2000 tweets made by each political party with official representation, a total of 16 000 tweets. I first create a function that downloads all the tweets into a list of datasets, one for each party. I then rbind them, fix labels and colours so that they correspond to the traditional colors used for the parties, fix the dates and plot.
 ```{r}
 # library
 library(rtweet)
