@@ -110,6 +110,7 @@ plotpartytwitter("month")
 
 The package wordcloud makes creating beautiful wordclouds incredibly easy. All one has to do is fix the data, remove some uninteresting words, get rid of some symbols and emojis and you're ready to go. Here, I will look at the last 1500 tweets by Annie Lööf. 
 
+
 ```{r}
 # library
 library(wordcloud)
@@ -117,13 +118,6 @@ library(tm)
 library(readr)
 library(RColorBrewer)
 library(ggthemes)
-
-#Rm
-library(rtweet)
-library(dplyr)
-library(lubridate)
-library(ggplot2)
-library(plotly)
 
 
 # download Last 1500 tweets from Annie Lööf without retweets
