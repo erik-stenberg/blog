@@ -6,10 +6,29 @@
     <description>Recent content in Posts on erst</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 11 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 05 Apr 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Swedish politics and Twitter</title>
+      <link>/post/swedish-politics-and-twitter/</link>
+      <pubDate>Thu, 05 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/swedish-politics-and-twitter/</guid>
+      <description>In this post I’ll be using the package ‘rtweet’ to look at how the Swedish political parties have used twitter in the recent years. I will also show how to inspect individual twitter accounts, for example the party leaders, to see what words they frequently use on twitter.
+The package is very easy to use for downloading tweets, both from invidiual accounts and hashtags. For example, I could download the last, say 100 tweets, tagged with the popular hashtag #svpol by running</description>
+    </item>
+    
+    <item>
+      <title>Python in R with reticulate</title>
+      <link>/post/python-in-r-with-reticulate/</link>
+      <pubDate>Tue, 27 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/python-in-r-with-reticulate/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Python in knitr</title>

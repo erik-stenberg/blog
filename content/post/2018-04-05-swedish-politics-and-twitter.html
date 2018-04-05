@@ -1,0 +1,168 @@
+---
+title: Swedish politics and Twitter
+author: Erik
+date: '2018-04-05'
+slug: swedish-politics-and-twitter
+categories: []
+tags: []
+---
+
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/plotly-binding/plotly.js"></script>
+<script src="/rmarkdown-libs/typedarray/typedarray.min.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<link href="/rmarkdown-libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/crosstalk/js/crosstalk.min.js"></script>
+<link href="/rmarkdown-libs/plotlyjs/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/plotlyjs/plotly-latest.min.js"></script>
+
+
+<p>In this post I’ll be using the package ‘rtweet’ to look at how the Swedish political parties have used twitter in the recent years. I will also show how to inspect individual twitter accounts, for example the party leaders, to see what words they frequently use on twitter.</p>
+<p>The package is very easy to use for downloading tweets, both from invidiual accounts and hashtags. For example, I could download the last, say 100 tweets, tagged with the popular hashtag #svpol by running</p>
+<pre class="r"><code>rt &lt;- rtweet::search_tweets(&quot;#svpol&quot;, n = 100, include_rts = FALSE)</code></pre>
+<p>Let’s look at the last five tweets and see what we can figure out about them. For example, we can see their twitter names, the actual tweets and profile picture URL</p>
+<pre class="r"><code>head(rt$screen_name,3)</code></pre>
+<pre><code>## [1] &quot;VladanLausevic&quot; &quot;HelenVonPost&quot;   &quot;BKjellstrom&quot;</code></pre>
+<pre class="r"><code>head(rt$text,3)</code></pre>
+<pre><code>## [1] &quot;Odemokratiska trender i Europa fortsätter tyvärr. \n\n\&quot;För att fängsla någon för osmakliga påståenden, det anstår inte en rättsstat. Faktiskt liknar det mer den fanatism som är den liberala demokratins fiende.\&quot; \n\nhttps://t.co/swyn3BpTZI \n\n#svpol #libpol #eupol #demokrati&quot;
+## [2] &quot;#svpol\nVisste ni, att Ygeman inte är pacifistiskt lagd, inte ganska pacifistiskt lagd, utan ”nog ganska pacifistiskt lagd”?\nEfter fem dagar i lumpen gick det upp för honom hur det ”i grunden” låg till. https://t.co/BeVGmnPUMT&quot;                                                  
+## [3] &quot;#svpol Amerikanska kongressen börjar enligt uppgift undersöka de nya teknikbolagens marknadsdominans. USA har inom monopolområdet en stark lagstiftning som tar sig an både horisontell (inom samma bransch) och vertikal (t ex från råvara till slutprodukt) integration.&quot;</code></pre>
+<pre class="r"><code>head(rt$profile_image_url,3)</code></pre>
+<pre><code>## [1] &quot;http://pbs.twimg.com/profile_images/645627498441613312/9ORfxS9D_normal.jpg&quot;                         
+## [2] &quot;http://pbs.twimg.com/profile_images/378800000105366866/bb41c2677dc137e61740bbb45146cfa2_normal.jpeg&quot;
+## [3] &quot;http://pbs.twimg.com/profile_images/907301518449274880/iDeZ7qo9_normal.jpg&quot;</code></pre>
+<p>There’s actually a whole lot of things we can find out about these tweets. All in all around 80 variables. Here are the 20 first</p>
+<pre class="r"><code>head(colnames(rt),20)</code></pre>
+<pre><code>##  [1] &quot;user_id&quot;              &quot;status_id&quot;            &quot;created_at&quot;          
+##  [4] &quot;screen_name&quot;          &quot;text&quot;                 &quot;source&quot;              
+##  [7] &quot;display_text_width&quot;   &quot;reply_to_status_id&quot;   &quot;reply_to_user_id&quot;    
+## [10] &quot;reply_to_screen_name&quot; &quot;is_quote&quot;             &quot;is_retweet&quot;          
+## [13] &quot;favorite_count&quot;       &quot;retweet_count&quot;        &quot;hashtags&quot;            
+## [16] &quot;symbols&quot;              &quot;urls_url&quot;             &quot;urls_t.co&quot;           
+## [19] &quot;urls_expanded_url&quot;    &quot;media_url&quot;</code></pre>
+<div id="plotting-activity-over-time" class="section level2">
+<h2>Plotting activity over time</h2>
+<p>Let’s begin with looking at the twitter activity. I will be using ggplot and plotly. I first create a function that downloads all the parties into a list of datasets. I then rbind them, fix labels and colours so that they correspond to the traditional colors used for the parties, fix the dates and plot.</p>
+<pre class="r"><code># library
+library(rtweet)
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+library(plotly)
+
+# load tweets
+imp_tweets &lt;- function(n, include_rts=T){
+  parti &lt;- list()
+  parti[[&quot;v&quot;]] &lt;- get_timeline(&quot;vansterpartiet&quot;,n, include_rts=include_rts)
+  parti[[&quot;s&quot;]] &lt;- get_timeline(&quot;socialdemokrat&quot;,n, include_rts=include_rts)
+  parti[[&quot;mp&quot;]] &lt;- get_timeline(&quot;miljopartiet&quot;, n, include_rts=include_rts)
+  parti[[&quot;sd&quot;]] &lt;- get_timeline(&quot;sdriks&quot;,n, include_rts=include_rts)
+  parti[[&quot;c&quot;]] &lt;- get_timeline(&quot;Centerpartiet&quot;,n, include_rts=include_rts)
+  parti[[&quot;l&quot;]] &lt;- get_timeline(&quot;liberalerna&quot;,n, include_rts=include_rts)
+  parti[[&quot;m&quot;]] &lt;- get_timeline(&quot;nya_moderaterna&quot;,n, include_rts=include_rts)
+  parti[[&quot;kd&quot;]] &lt;- get_timeline(&quot;kdriks&quot;,n, include_rts=include_rts)
+  return(parti)
+}
+
+# download 2000 tweets and includ retweets
+parti &lt;- imp_tweets(2000, T)
+
+# create a df with all the dates
+act &lt;- lapply(parti, function(x) x[,c(&quot;created_at&quot;,&quot;screen_name&quot;)])
+tweets &lt;- do.call(rbind.data.frame, act)
+
+# plot activity if tweets is a list of data frames of different accounts
+plotpartytwitter &lt;- function(floor_to = &quot;day&quot;){
+  tweets$screen_name &lt;- as.factor(tweets$screen_name)
+  labels = c(&quot;Centerpartiet&quot;,&quot;Kristdemokraterna&quot;,&quot;Liberalerna&quot;,&quot;Miljöpartiet&quot;,&quot;Nya Moderaterna&quot;,&quot;Sverigedemokraterna&quot;,&quot;Socialdemokraterna&quot;,&quot;Vänsterpartiet&quot;)
+  values = c(&quot;#15983B&quot;, &quot;#231D78&quot;, &quot;#6FB9EA&quot;,&quot;#81CF44&quot;,&quot;#204FD9&quot;,&quot;#DDDB30&quot;,&quot;#EB242B&quot;,&quot;#97040C&quot;)
+  levels(tweets$screen_name) &lt;- labels
+  
+  tweets_act &lt;- tweets %&gt;%
+    #mutate(created_at = format.POSIXct(created_at, tz = &quot;Europe/Stockholm&quot;)) %&gt;% 
+    mutate(created_at = format(floor_date(as.POSIXct(created_at), floor_to))) %&gt;% 
+    mutate(time = as.POSIXct(created_at)) %&gt;% 
+    group_by(screen_name) %&gt;% 
+    count(time) 
+  
+  ftt &lt;- floor_to  %&gt;% as.data.frame() %&gt;% mutate(floor_to = ifelse(floor_to==&quot;week&quot;,&quot;vecka&quot;,
+                                              ifelse(floor_to==&quot;month&quot;,&quot;månad&quot;,
+                                                     ifelse(floor_to==&quot;hour&quot;,&quot;timma&quot;,NA))))
+  
+  g = ggplot(tweets_act, aes(x=time,
+                             y=n,
+                             color=screen_name,
+                             text=paste0(screen_name, &quot;&lt;br&gt;Antal tweets denna &quot;,ftt$floor_to,&quot;: &quot;,n)))+
+    geom_line()+
+    theme_minimal(base_size = 14)+
+    labs(title = &quot;Partiernas aktivitet på Twitter&quot;, x = paste0(&quot;Antal tweets (per &quot;, floor_to ,&quot;)&quot; ,sep=&quot;&quot; ) , y = &quot;&quot;, color =&quot;Parti\n&quot;)+
+    scale_color_manual(values=values)
+  ggplotly(g, tooltip=c(&quot;text&quot;)) %&gt;% config(displayModeBar = F)
+}</code></pre>
+<p>Now all that remains is to run the function. It is possible to hide individual parties by clicking at them, zoom in on different times periods. Double click to zoom out again. I can change between month, day, hour, minute if I want. For this plot, I will look at month. This flexibility is great because I can easily turn this into a Shiny app.</p>
+<pre class="r"><code>plotpartytwitter(&quot;month&quot;)</code></pre>
+<div id="2c326330afe9" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="2c326330afe9">{"x":{"data":[{"x":[1485878400,1488297600,1490976000,1493568000,1496246400,1498838400,1501516800,1504195200,1506787200,1509465600,1512057600,1514736000,1517414400,1519833600,1522512000],"y":[113,165,117,131,90,256,140,174,183,89,104,88,239,299,12],"text":["Centerpartiet<br>Antal tweets denna månad: 113","Centerpartiet<br>Antal tweets denna månad: 165","Centerpartiet<br>Antal tweets denna månad: 117","Centerpartiet<br>Antal tweets denna månad: 131","Centerpartiet<br>Antal tweets denna månad: 90","Centerpartiet<br>Antal tweets denna månad: 256","Centerpartiet<br>Antal tweets denna månad: 140","Centerpartiet<br>Antal tweets denna månad: 174","Centerpartiet<br>Antal tweets denna månad: 183","Centerpartiet<br>Antal tweets denna månad: 89","Centerpartiet<br>Antal tweets denna månad: 104","Centerpartiet<br>Antal tweets denna månad: 88","Centerpartiet<br>Antal tweets denna månad: 239","Centerpartiet<br>Antal tweets denna månad: 299","Centerpartiet<br>Antal tweets denna månad: 12"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(21,152,59,1)","dash":"solid"},"hoveron":"points","name":"Centerpartiet","legendgroup":"Centerpartiet","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1475251200,1477929600,1480521600,1483200000,1485878400,1488297600,1490976000,1493568000,1496246400,1498838400,1501516800,1504195200,1506787200,1509465600,1512057600,1514736000,1517414400,1519833600,1522512000],"y":[41,126,66,78,75,157,173,124,106,216,47,226,213,90,86,102,118,144,11],"text":["Kristdemokraterna<br>Antal tweets denna månad: 41","Kristdemokraterna<br>Antal tweets denna månad: 126","Kristdemokraterna<br>Antal tweets denna månad: 66","Kristdemokraterna<br>Antal tweets denna månad: 78","Kristdemokraterna<br>Antal tweets denna månad: 75","Kristdemokraterna<br>Antal tweets denna månad: 157","Kristdemokraterna<br>Antal tweets denna månad: 173","Kristdemokraterna<br>Antal tweets denna månad: 124","Kristdemokraterna<br>Antal tweets denna månad: 106","Kristdemokraterna<br>Antal tweets denna månad: 216","Kristdemokraterna<br>Antal tweets denna månad: 47","Kristdemokraterna<br>Antal tweets denna månad: 226","Kristdemokraterna<br>Antal tweets denna månad: 213","Kristdemokraterna<br>Antal tweets denna månad: 90","Kristdemokraterna<br>Antal tweets denna månad: 86","Kristdemokraterna<br>Antal tweets denna månad: 102","Kristdemokraterna<br>Antal tweets denna månad: 118","Kristdemokraterna<br>Antal tweets denna månad: 144","Kristdemokraterna<br>Antal tweets denna månad: 11"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(35,29,120,1)","dash":"solid"},"hoveron":"points","name":"Kristdemokraterna","legendgroup":"Kristdemokraterna","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1504195200,1506787200,1509465600,1512057600,1514736000,1517414400,1519833600,1522512000],"y":[230,334,357,247,336,240,432,22],"text":["Liberalerna<br>Antal tweets denna månad: 230","Liberalerna<br>Antal tweets denna månad: 334","Liberalerna<br>Antal tweets denna månad: 357","Liberalerna<br>Antal tweets denna månad: 247","Liberalerna<br>Antal tweets denna månad: 336","Liberalerna<br>Antal tweets denna månad: 240","Liberalerna<br>Antal tweets denna månad: 432","Liberalerna<br>Antal tweets denna månad: 22"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(111,185,234,1)","dash":"solid"},"hoveron":"points","name":"Liberalerna","legendgroup":"Liberalerna","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1456761600,1459440000,1462032000,1464710400,1467302400,1469980800,1472659200,1475251200,1477929600,1480521600,1483200000,1485878400,1488297600,1490976000,1493568000,1496246400,1498838400,1501516800,1504195200,1506787200,1509465600,1512057600,1514736000,1517414400,1519833600,1522512000],"y":[23,81,125,79,68,59,223,114,94,79,85,98,131,84,112,99,63,101,133,103,77,53,47,35,30,2],"text":["Miljöpartiet<br>Antal tweets denna månad: 23","Miljöpartiet<br>Antal tweets denna månad: 81","Miljöpartiet<br>Antal tweets denna månad: 125","Miljöpartiet<br>Antal tweets denna månad: 79","Miljöpartiet<br>Antal tweets denna månad: 68","Miljöpartiet<br>Antal tweets denna månad: 59","Miljöpartiet<br>Antal tweets denna månad: 223","Miljöpartiet<br>Antal tweets denna månad: 114","Miljöpartiet<br>Antal tweets denna månad: 94","Miljöpartiet<br>Antal tweets denna månad: 79","Miljöpartiet<br>Antal tweets denna månad: 85","Miljöpartiet<br>Antal tweets denna månad: 98","Miljöpartiet<br>Antal tweets denna månad: 131","Miljöpartiet<br>Antal tweets denna månad: 84","Miljöpartiet<br>Antal tweets denna månad: 112","Miljöpartiet<br>Antal tweets denna månad: 99","Miljöpartiet<br>Antal tweets denna månad: 63","Miljöpartiet<br>Antal tweets denna månad: 101","Miljöpartiet<br>Antal tweets denna månad: 133","Miljöpartiet<br>Antal tweets denna månad: 103","Miljöpartiet<br>Antal tweets denna månad: 77","Miljöpartiet<br>Antal tweets denna månad: 53","Miljöpartiet<br>Antal tweets denna månad: 47","Miljöpartiet<br>Antal tweets denna månad: 35","Miljöpartiet<br>Antal tweets denna månad: 30","Miljöpartiet<br>Antal tweets denna månad: 2"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(129,207,68,1)","dash":"solid"},"hoveron":"points","name":"Miljöpartiet","legendgroup":"Miljöpartiet","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1485878400,1488297600,1490976000,1493568000,1496246400,1498838400,1501516800,1504195200,1506787200,1509465600,1512057600,1514736000,1517414400,1519833600,1522512000],"y":[22,154,139,168,192,253,133,134,257,140,159,137,131,161,20],"text":["Nya Moderaterna<br>Antal tweets denna månad: 22","Nya Moderaterna<br>Antal tweets denna månad: 154","Nya Moderaterna<br>Antal tweets denna månad: 139","Nya Moderaterna<br>Antal tweets denna månad: 168","Nya Moderaterna<br>Antal tweets denna månad: 192","Nya Moderaterna<br>Antal tweets denna månad: 253","Nya Moderaterna<br>Antal tweets denna månad: 133","Nya Moderaterna<br>Antal tweets denna månad: 134","Nya Moderaterna<br>Antal tweets denna månad: 257","Nya Moderaterna<br>Antal tweets denna månad: 140","Nya Moderaterna<br>Antal tweets denna månad: 159","Nya Moderaterna<br>Antal tweets denna månad: 137","Nya Moderaterna<br>Antal tweets denna månad: 131","Nya Moderaterna<br>Antal tweets denna månad: 161","Nya Moderaterna<br>Antal tweets denna månad: 20"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(32,79,217,1)","dash":"solid"},"hoveron":"points","name":"Nya Moderaterna","legendgroup":"Nya Moderaterna","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1441036800,1443628800,1446307200,1448899200,1451577600,1454256000,1456761600,1459440000,1462032000,1464710400,1467302400,1469980800,1472659200,1475251200,1477929600,1480521600,1483200000,1485878400,1488297600,1490976000,1493568000,1496246400,1498838400,1501516800,1504195200,1506787200,1509465600,1512057600,1514736000,1517414400,1519833600,1522512000],"y":[3,22,13,19,25,22,29,60,13,41,50,66,71,49,83,44,75,43,43,56,96,97,211,130,156,117,152,105,73,84,136,9],"text":["Sverigedemokraterna<br>Antal tweets denna månad: 3","Sverigedemokraterna<br>Antal tweets denna månad: 22","Sverigedemokraterna<br>Antal tweets denna månad: 13","Sverigedemokraterna<br>Antal tweets denna månad: 19","Sverigedemokraterna<br>Antal tweets denna månad: 25","Sverigedemokraterna<br>Antal tweets denna månad: 22","Sverigedemokraterna<br>Antal tweets denna månad: 29","Sverigedemokraterna<br>Antal tweets denna månad: 60","Sverigedemokraterna<br>Antal tweets denna månad: 13","Sverigedemokraterna<br>Antal tweets denna månad: 41","Sverigedemokraterna<br>Antal tweets denna månad: 50","Sverigedemokraterna<br>Antal tweets denna månad: 66","Sverigedemokraterna<br>Antal tweets denna månad: 71","Sverigedemokraterna<br>Antal tweets denna månad: 49","Sverigedemokraterna<br>Antal tweets denna månad: 83","Sverigedemokraterna<br>Antal tweets denna månad: 44","Sverigedemokraterna<br>Antal tweets denna månad: 75","Sverigedemokraterna<br>Antal tweets denna månad: 43","Sverigedemokraterna<br>Antal tweets denna månad: 43","Sverigedemokraterna<br>Antal tweets denna månad: 56","Sverigedemokraterna<br>Antal tweets denna månad: 96","Sverigedemokraterna<br>Antal tweets denna månad: 97","Sverigedemokraterna<br>Antal tweets denna månad: 211","Sverigedemokraterna<br>Antal tweets denna månad: 130","Sverigedemokraterna<br>Antal tweets denna månad: 156","Sverigedemokraterna<br>Antal tweets denna månad: 117","Sverigedemokraterna<br>Antal tweets denna månad: 152","Sverigedemokraterna<br>Antal tweets denna månad: 105","Sverigedemokraterna<br>Antal tweets denna månad: 73","Sverigedemokraterna<br>Antal tweets denna månad: 84","Sverigedemokraterna<br>Antal tweets denna månad: 136","Sverigedemokraterna<br>Antal tweets denna månad: 9"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(221,219,48,1)","dash":"solid"},"hoveron":"points","name":"Sverigedemokraterna","legendgroup":"Sverigedemokraterna","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1493568000,1496246400,1498838400,1501516800,1504195200,1506787200,1509465600,1512057600,1514736000,1517414400,1519833600,1522512000],"y":[206,171,196,122,310,311,184,176,179,170,151,24],"text":["Socialdemokraterna<br>Antal tweets denna månad: 206","Socialdemokraterna<br>Antal tweets denna månad: 171","Socialdemokraterna<br>Antal tweets denna månad: 196","Socialdemokraterna<br>Antal tweets denna månad: 122","Socialdemokraterna<br>Antal tweets denna månad: 310","Socialdemokraterna<br>Antal tweets denna månad: 311","Socialdemokraterna<br>Antal tweets denna månad: 184","Socialdemokraterna<br>Antal tweets denna månad: 176","Socialdemokraterna<br>Antal tweets denna månad: 179","Socialdemokraterna<br>Antal tweets denna månad: 170","Socialdemokraterna<br>Antal tweets denna månad: 151","Socialdemokraterna<br>Antal tweets denna månad: 24"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(235,36,43,1)","dash":"solid"},"hoveron":"points","name":"Socialdemokraterna","legendgroup":"Socialdemokraterna","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1469980800,1472659200,1475251200,1477929600,1480521600,1483200000,1485878400,1488297600,1490976000,1493568000,1496246400,1498838400,1501516800,1504195200,1506787200,1509465600,1512057600,1514736000,1517414400,1519833600,1522512000],"y":[121,155,180,108,54,30,75,136,93,123,91,84,94,127,98,92,134,107,172,91,13],"text":["Vänsterpartiet<br>Antal tweets denna månad: 121","Vänsterpartiet<br>Antal tweets denna månad: 155","Vänsterpartiet<br>Antal tweets denna månad: 180","Vänsterpartiet<br>Antal tweets denna månad: 108","Vänsterpartiet<br>Antal tweets denna månad: 54","Vänsterpartiet<br>Antal tweets denna månad: 30","Vänsterpartiet<br>Antal tweets denna månad: 75","Vänsterpartiet<br>Antal tweets denna månad: 136","Vänsterpartiet<br>Antal tweets denna månad: 93","Vänsterpartiet<br>Antal tweets denna månad: 123","Vänsterpartiet<br>Antal tweets denna månad: 91","Vänsterpartiet<br>Antal tweets denna månad: 84","Vänsterpartiet<br>Antal tweets denna månad: 94","Vänsterpartiet<br>Antal tweets denna månad: 127","Vänsterpartiet<br>Antal tweets denna månad: 98","Vänsterpartiet<br>Antal tweets denna månad: 92","Vänsterpartiet<br>Antal tweets denna månad: 134","Vänsterpartiet<br>Antal tweets denna månad: 107","Vänsterpartiet<br>Antal tweets denna månad: 172","Vänsterpartiet<br>Antal tweets denna månad: 91","Vänsterpartiet<br>Antal tweets denna månad: 13"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(151,4,12,1)","dash":"solid"},"hoveron":"points","name":"Vänsterpartiet","legendgroup":"Vänsterpartiet","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":51.3341635533416,"r":9.29846409298464,"b":51.1415525114155,"l":36.2640099626401},"font":{"color":"rgba(0,0,0,1)","family":"","size":18.5969281859693},"title":"Partiernas aktivitet på Twitter","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":22.3163138231631},"xaxis":{"domain":[0,1],"type":"linear","autorange":false,"range":[1436963040,1526585760],"tickmode":"array","ticktext":["2016-01","2016-07","2017-01","2017-07","2018-01"],"tickvals":[1451577600,1467302400,1483200000,1498838400,1514736000],"categoryorder":"array","categoryarray":["2016-01","2016-07","2017-01","2017-07","2018-01"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":4.64923204649232,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":14.8775425487754},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":"Antal tweets (per month)","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":18.5969281859693},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"type":"linear","autorange":false,"range":[-19.5,453.5],"tickmode":"array","ticktext":["0","100","200","300","400"],"tickvals":[0,100,200,300,400],"categoryorder":"array","categoryarray":["0","100","200","300","400"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":4.64923204649232,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":14.8775425487754},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"x","title":"","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":18.5969281859693},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":14.8775425487754},"y":0.889763779527559},"annotations":[{"text":"Parti<br />","x":1.02,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":18.5969281859693},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"left","yanchor":"bottom","legendTitle":true}],"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false,"displayModeBar":false},"source":"A","attrs":{"2c321b4b2806":{"x":{},"y":{},"colour":{},"text":{},"type":"scatter"}},"cur_data":"2c321b4b2806","visdat":{"2c321b4b2806":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1}},"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":{"render":[{"code":"function(el, x) { var ctConfig = crosstalk.var('plotlyCrosstalkOpts').set({\"on\":\"plotly_click\",\"persistent\":false,\"dynamic\":false,\"selectize\":false,\"opacityDim\":0.2,\"selected\":{\"opacity\":1}}); }","data":null}]}}</script>
+</div>
+<div id="plotting-popular-words-with-wordcloud" class="section level2">
+<h2>Plotting popular words with wordcloud</h2>
+<p>The package wordcloud makes creaeting beautiful wordclouds incredibly easy. All one has to do is fix the data, remove some uninteresting words, get rid of some symbols and emojis and you’re ready to go.</p>
+<pre class="r"><code># library
+library(wordcloud)
+library(tm)
+library(readr)
+library(RColorBrewer)
+library(ggthemes)
+
+#Rm
+library(rtweet)
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+library(plotly)
+
+
+# download Last 1500 tweets from Annie Lööf without retweets
+tweets_no_rt &lt;- get_timeline(&quot;annieloof&quot;, 1500, include_rts=F)
+
+# get rid of smileys , curly quotes, dash and dots
+twtext &lt;- tweets_no_rt$text %&gt;% lapply(function(x) iconv(x,&quot;UTF-8-MAC&quot;,&quot;UTF-8&quot;, sub=&quot;&quot;))
+twtext &lt;- gsub(&quot;[“”]&quot;, &quot;&quot;, twtext)
+twtext &lt;- gsub(&#39;[\u2013:\u2016]&#39;, &quot;&quot;, twtext)
+twtext &lt;- gsub(&quot;…&quot;,&quot;&quot;, twtext)
+
+# create corpus
+tw_c &lt;- Corpus(VectorSource(twtext))
+
+# clean data from stopwords, punctuations, numbers and make everything lower case
+stopwords_sv &lt;- read_csv(&quot;stopwords-sv.txt&quot;)
+
+tw_c &lt;- tw_c %&gt;%
+  tm_map(removePunctuation) %&gt;% 
+  tm_map(content_transformer(tolower)) %&gt;% 
+  tm_map(removeNumbers) %&gt;%
+  tm_map(stripWhitespace) %&gt;% 
+  tm_map(removeWords, stopwords(&quot;sv&quot;)) %&gt;%
+  tm_map(removeWords, as.matrix(stopwords_sv))
+
+
+# plot wordcloud
+pal &lt;- brewer.pal(9,&quot;Dark2&quot;)
+pal &lt;- pal[-(1:4)]
+wordcloud(tw_c,max.words = 150,random.order = F,colors = pal,scale = c(4,0.1))</code></pre>
+<p><img src="/post/2018-04-05-swedish-politics-and-twitter_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>To create a more traditional plot to see frequency of each of the words. Hovering over each bar will display exact number of times the word was used</p>
+<pre class="r"><code># plot most frequent used words
+tdm &lt;- TermDocumentMatrix(tw_c)
+tdm.rs &lt;- sort(rowSums(as.matrix(tdm)), decreasing=TRUE)
+tdm.df &lt;- data.frame(word = names(tdm.rs), freq = tdm.rs, stringsAsFactors = FALSE)
+
+ggplotly(ggplot(head(tdm.df,20), aes(x=reorder(word,freq), y=freq, text=paste0(&quot;Antal gånger ordet &quot;,word,&quot; användes: &quot;,freq)))+
+  geom_bar(stat=&quot;identity&quot;)+
+  coord_flip()+
+  ylab(&quot;Frequency&quot;)+
+  xlab(&quot;&quot;)+
+  theme_hc(), tooltip=c(&quot;text&quot;))%&gt;% config(displayModeBar = F)</code></pre>
+<div id="2c32540ed38" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="2c32540ed38">{"x":{"data":[{"orientation":"h","width":[0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[28,28,29,29,30,33,45,45,46,47,48,48,53,55,60,69,80,82,85,91],"y":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"text":["Antal gånger ordet både användes: 28","Antal gånger ordet viktiga användes: 28","Antal gånger ordet lyssna användes: 29","Antal gånger ordet nytt användes: 29","Antal gånger ordet barn användes: 30","Antal gånger ordet centerpartiets användes: 33","Antal gånger ordet amp användes: 45","Antal gånger ordet grattis användes: 45","Antal gånger ordet jobb användes: 46","Antal gånger ordet förslag användes: 47","Antal gånger ordet alliansen användes: 48","Antal gånger ordet ledarskap användes: 48","Antal gånger ordet landet användes: 53","Antal gånger ordet regeringen användes: 55","Antal gånger ordet år användes: 60","Antal gånger ordet behöver användes: 69","Antal gånger ordet centerpartiet användes: 80","Antal gånger ordet läs användes: 82","Antal gånger ordet sverige användes: 85","Antal gånger ordet hela användes: 91"],"type":"bar","marker":{"autocolorscale":false,"color":"rgba(89,89,89,1)","line":{"width":1.88976377952756,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.2283105022831,"r":7.30593607305936,"b":42.5736820257368,"l":100.224159402242},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"sans","size":15.9402241594022},"xaxis":{"domain":[0,1],"type":"linear","autorange":false,"range":[-4.55,95.55],"tickmode":"array","ticktext":["0","25","50","75"],"tickvals":[0,25,50,75],"categoryorder":"array","categoryarray":["0","25","50","75"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":"Frequency","titlefont":{"color":"rgba(0,0,0,1)","family":"sans","size":15.9402241594022},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"type":"linear","autorange":false,"range":[0.4,20.6],"tickmode":"array","ticktext":["både","viktiga","lyssna","nytt","barn","centerpartiets","amp","grattis","jobb","förslag","alliansen","ledarskap","landet","regeringen","år","behöver","centerpartiet","läs","sverige","hela"],"tickvals":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"categoryorder":"array","categoryarray":["både","viktiga","lyssna","nytt","barn","centerpartiets","amp","grattis","jobb","förslag","alliansen","ledarskap","landet","regeringen","år","behöver","centerpartiet","läs","sverige","hela"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(216,216,216,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":"","titlefont":{"color":"rgba(0,0,0,1)","family":"sans","size":15.9402241594022},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"sans","size":12.7521793275218}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false,"displayModeBar":false},"source":"A","attrs":{"2c321cdf416f":{"x":{},"y":{},"text":{},"type":"bar"}},"cur_data":"2c321cdf416f","visdat":{"2c321cdf416f":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1}},"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":{"render":[{"code":"function(el, x) { var ctConfig = crosstalk.var('plotlyCrosstalkOpts').set({\"on\":\"plotly_click\",\"persistent\":false,\"dynamic\":false,\"selectize\":false,\"opacityDim\":0.2,\"selected\":{\"opacity\":1}}); }","data":null}]}}</script>
+</div>
