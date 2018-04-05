@@ -108,7 +108,11 @@ plotpartytwitter("month")
 
 ## Plotting popular words with wordcloud
 
+<<<<<<< HEAD
 The package wordcloud makes creating beautiful wordclouds incredibly easy. All one has to do is fix the data, remove some uninteresting words, get rid of some symbols and emojis and you're ready to go. Here, I will look at the last 1500 tweets by Annie Lööf. 
+=======
+The package wordcloud makes creaeting beautiful wordclouds incredibly easy. All one has to do is fix the data, remove some uninteresting words, get rid of some symbols and emojis and you're ready to go.
+>>>>>>> 6b52a73a102ee33b3c2f2cfef2d566e19d9e5d36
 
 ```{r}
 # library
