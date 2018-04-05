@@ -1,0 +1,176 @@
+---
+title: Swedish politics and Twitter
+author: Erik
+date: '2018-04-05'
+slug: swedish-politics-and-twitter
+categories: []
+tags: []
+---
+```{r, include=F}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(eval = T)
+knitr::opts_knit$set(root.dir = "/Users/erik/Documents/blog/data")
+```
+
+In this post I'll be using the package 'rtweet' to look at how the Swedish political parties have used twitter in the recent years. I will also show how to inspect individual twitter accounts, for example the party leaders, to see what words they frequently use on twitter.
+
+The package is very easy to use for downloading tweets, both from invidiual accounts and hashtags. For example, I could download the last, say 100 tweets, tagged with the popular hashtag #svpol by running
+
+```{r}
+rt <- rtweet::search_tweets("#svpol", n = 100, include_rts = FALSE)
+```
+
+Let's look at the last five tweets and see what we can figure out about them. For example, we can see their twitter names, the actual tweets and profile picture URL
+
+```{r}
+head(rt$screen_name,3)
+head(rt$text,3)
+head(rt$profile_image_url,3)
+```
+
+
+There's actually a whole lot of things we can find out about these tweets. All in all around 80 variables. Here are the 20 first
+
+```{r}
+head(colnames(rt),20)
+```
+
+## Plotting activity over time
+
+Let's begin with looking at the twitter activity. I will be using ggplot and plotly. I first create a function that downloads all the parties into a list of datasets. I then rbind them, fix labels and colours so that they correspond to the traditional colors used for the parties, fix the dates and plot.
+```{r}
+# library
+library(rtweet)
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+library(plotly)
+
+# load tweets
+imp_tweets <- function(n, include_rts=T){
+  parti <- list()
+  parti[["v"]] <- get_timeline("vansterpartiet",n, include_rts=include_rts)
+  parti[["s"]] <- get_timeline("socialdemokrat",n, include_rts=include_rts)
+  parti[["mp"]] <- get_timeline("miljopartiet", n, include_rts=include_rts)
+  parti[["sd"]] <- get_timeline("sdriks",n, include_rts=include_rts)
+  parti[["c"]] <- get_timeline("Centerpartiet",n, include_rts=include_rts)
+  parti[["l"]] <- get_timeline("liberalerna",n, include_rts=include_rts)
+  parti[["m"]] <- get_timeline("nya_moderaterna",n, include_rts=include_rts)
+  parti[["kd"]] <- get_timeline("kdriks",n, include_rts=include_rts)
+  return(parti)
+}
+
+# download 2000 tweets and includ retweets
+parti <- imp_tweets(2000, T)
+
+# create a df with all the dates
+act <- lapply(parti, function(x) x[,c("created_at","screen_name")])
+tweets <- do.call(rbind.data.frame, act)
+
+# plot activity if tweets is a list of data frames of different accounts
+plotpartytwitter <- function(floor_to = "day"){
+  tweets$screen_name <- as.factor(tweets$screen_name)
+  labels = c("Centerpartiet","Kristdemokraterna","Liberalerna","Miljöpartiet","Nya Moderaterna","Sverigedemokraterna","Socialdemokraterna","Vänsterpartiet")
+  values = c("#15983B", "#231D78", "#6FB9EA","#81CF44","#204FD9","#DDDB30","#EB242B","#97040C")
+  levels(tweets$screen_name) <- labels
+  
+  tweets_act <- tweets %>%
+    #mutate(created_at = format.POSIXct(created_at, tz = "Europe/Stockholm")) %>% 
+    mutate(created_at = format(floor_date(as.POSIXct(created_at), floor_to))) %>% 
+    mutate(time = as.POSIXct(created_at)) %>% 
+    group_by(screen_name) %>% 
+    count(time) 
+  
+  ftt <- floor_to  %>% as.data.frame() %>% mutate(floor_to = ifelse(floor_to=="week","vecka",
+                                              ifelse(floor_to=="month","månad",
+                                                     ifelse(floor_to=="hour","timma",NA))))
+  
+  g = ggplot(tweets_act, aes(x=time,
+                             y=n,
+                             color=screen_name,
+                             text=paste0(screen_name, "<br>Antal tweets denna ",ftt$floor_to,": ",n)))+
+    geom_line()+
+    theme_minimal(base_size = 14)+
+    labs(title = "Partiernas aktivitet på Twitter", x = paste0("Antal tweets (per ", floor_to ,")" ,sep="" ) , y = "", color ="Parti\n")+
+    scale_color_manual(values=values)
+  ggplotly(g, tooltip=c("text")) %>% config(displayModeBar = F)
+}
+```
+
+
+Now all that remains is to run the function. It is possible to hide individual parties by clicking at them, zoom in on different times periods. Double click to zoom out again. I can change between month, day, hour, minute if I want. For this plot, I will look at month. This flexibility is great because I can easily turn this into a Shiny app.
+```{r}
+plotpartytwitter("month")
+```
+
+
+## Plotting popular words with wordcloud
+
+The package wordcloud makes creating beautiful wordclouds incredibly easy. All one has to do is fix the data, remove some uninteresting words, get rid of some symbols and emojis and you're ready to go. Here, I will look at the last 1500 tweets by Annie Lööf. 
+
+```{r}
+# library
+library(wordcloud)
+library(tm)
+library(readr)
+library(RColorBrewer)
+library(ggthemes)
+
+#Rm
+library(rtweet)
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+library(plotly)
+
+
+# download Last 1500 tweets from Annie Lööf without retweets
+tweets_no_rt <- get_timeline("annieloof", 1500, include_rts=F)
+
+# get rid of smileys , curly quotes, dash and dots
+twtext <- tweets_no_rt$text %>% lapply(function(x) iconv(x,"UTF-8-MAC","UTF-8", sub=""))
+twtext <- gsub("[“”]", "", twtext)
+twtext <- gsub('[\u2013:\u2016]', "", twtext)
+twtext <- gsub("…","", twtext)
+
+# create corpus
+tw_c <- Corpus(VectorSource(twtext))
+
+# clean data from stopwords, punctuations, numbers and make everything lower case
+stopwords_sv <- read_csv("stopwords-sv.txt")
+
+tw_c <- tw_c %>%
+  tm_map(removePunctuation) %>% 
+  tm_map(content_transformer(tolower)) %>% 
+  tm_map(removeNumbers) %>%
+  tm_map(stripWhitespace) %>% 
+  tm_map(removeWords, stopwords("sv")) %>%
+  tm_map(removeWords, as.matrix(stopwords_sv))
+
+
+# plot wordcloud
+pal <- brewer.pal(9,"Dark2")
+pal <- pal[-(1:4)]
+wordcloud(tw_c,max.words = 150,random.order = F,colors = pal,scale = c(4,0.1))
+```
+
+To create a more traditional plot to see frequency of each of the words. Hovering over each bar will display exact number of times the word was used
+
+```{r}
+# plot most frequent used words
+tdm <- TermDocumentMatrix(tw_c)
+tdm.rs <- sort(rowSums(as.matrix(tdm)), decreasing=TRUE)
+tdm.df <- data.frame(word = names(tdm.rs), freq = tdm.rs, stringsAsFactors = FALSE)
+
+ggplotly(ggplot(head(tdm.df,20), aes(x=reorder(word,freq), y=freq, text=paste0("Antal gånger ordet ",word," användes: ",freq)))+
+  geom_bar(stat="identity")+
+  coord_flip()+
+  ylab("Frequency")+
+  xlab("")+
+  theme_hc(), tooltip=c("text"))%>% config(displayModeBar = F)
+```
+
+
+
